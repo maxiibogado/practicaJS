@@ -40,6 +40,11 @@ switch (opcion) {
     break;
   case 2:
     textoUsuario = prompt("Ingrese un texto");
+    // valido que el usuario no haya apretado enter sin ningún carácter ingresado.
+    while (textoUsuario == "") {
+    textoUsuario = prompt("Ingrese un texto");
+    }
+    
     while (textoAConcatenar != "ESC") {
       textoAConcatenar = prompt("Ingrese un texto a concatenar");
       textoConcatenado = textoConcatenado + textoAConcatenar;
@@ -71,6 +76,7 @@ switch (opcion) {
     break;
 
   default:
+    alert("Error en el número")
     console.error("Error en el número");
     break;
 }
