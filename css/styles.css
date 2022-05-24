@@ -1,6 +1,9 @@
 .logoDimensiones{
-    width: 50%;
-    height: auto;
-    margin-left: 100%;
+    
+        max-height: 72px;
+        margin-right: 10px;
+        margin-top: -3px;
+        display: inline-block;
+    
 }
 

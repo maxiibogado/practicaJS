@@ -1,5 +1,6 @@
 //* Calculo del IMC
 
+
 const definirComposicionCorporal = imc => {
     if (imc < 18.5) {
         alert("Composición corporal: Peso inferior al normal")
@@ -13,21 +14,23 @@ const definirComposicionCorporal = imc => {
 } 
 
 function verificarAltura(altura) {
-    while (altura == "") {
+    while (altura == "" || altura == null || altura == undefined) {
         altura = Number(prompt("Ingrese su estatura en CM correctamente"));
         return altura;
     }
+    return altura;
 }
 
 function verificarPeso(peso){
-    while (peso == "") {
+    while (peso == "" || peso == null || peso == undefined) {
         peso = Number(prompt("Ingrese su peso en KG correctamente"));
         return peso;
     }
+    return peso;
 }
 
 function calcularYMostrarIMC(peso,altura) {
-    imc = peso / (Math.pow(altura,2)); 
+    imc = (peso / (Math.pow(altura,2))).toFixed(2); 
     alert("Su IMC es: " + imc);
 }
 

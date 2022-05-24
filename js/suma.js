@@ -22,13 +22,13 @@ const division = (numero1, numero2) => numero1 / numero2;
 function calculadora(operacion, ...numeros) {
   switch (operacion) {
     case "+":
-      return suma(...numeros);
+      return suma(...numeros).toFixed(2);
     case "-":
-      return resta(...numeros);
+      return resta(...numeros).toFixed(2);
     case "*":
-      return multiplicacion(...numeros);
+      return multiplicacion(...numeros).toFixed(2);
     case "/":
-      return division(...numeros);
+      return division(...numeros).toFixed(2);
       break;
     default:
       return 0;
@@ -36,5 +36,5 @@ function calculadora(operacion, ...numeros) {
   }
 }
 
-console.log(calculadora("-", 1, 2, 3));
-console.log(calculadora("*", 1, 2, 3));
+alert(calculadora("-", 1, 2, 3));
+alert(calculadora("*", 1, 2, 3));
