@@ -14,17 +14,15 @@ const definirComposicionCorporal = imc => {
 } 
 
 function verificarAltura(altura) {
-    while (altura == "" || altura == null || altura == undefined) {
-        altura = Number(prompt("Ingrese su estatura en CM correctamente"));
-        return altura;
+    while (altura == "" || altura == null || altura == undefined || altura == 0) {
+        altura = Number(prompt("Ingrese su estatura en CM correctamente"));       
     }
     return altura;
 }
 
 function verificarPeso(peso){
-    while (peso == "" || peso == null || peso == undefined) {
-        peso = Number(prompt("Ingrese su peso en KG correctamente"));
-        return peso;
+    while (peso == "" || peso == null || peso == undefined || peso == 0)  {
+        peso = Number(prompt("Ingrese su peso en KG correctamente"))
     }
     return peso;
 }
