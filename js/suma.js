@@ -1,3 +1,12 @@
+class comidaRegistrada{
+  constructor(comida,calorias){
+  this.comida = comida;
+  this.calorias = calorias;
+  }
+}
+
+registrosDeComida = []; 
+
 const suma = (...numeros) => {
   let resultadoSuma = 0;
   numeros.forEach((numero) => (resultadoSuma += numero));
@@ -36,5 +45,24 @@ function calculadora(operacion, ...numeros) {
   }
 }
 
-alert(calculadora("-", 1, 2, 3));
-alert(calculadora("*", 1, 2, 3));
+
+cantidadDeComidas = Number(prompt("Ingrese cuántas comidas realizó"))
+for (let index = 0; index < cantidadDeComidas; index++) {
+   comida = prompt("Ingrese el nombre de su comida");
+   calorias = Number(prompt("Ingrese las calorias de su comida"));  
+   const registro = new comidaRegistrada(comida,calorias);
+   registrosDeComida.push(registro);
+}
+
+console.log(registrosDeComida);
+
+//caloriasTotales = registrosDeComida.reduce((acumulador,comidaRegistrada) => comidaRegistrada.calorias + acumulador,0);
+//console.log("Usted consumió: " + caloriasTotales + " calorias en el día");
+
+ const arrayCalorias = registrosDeComida.map((comidaRegistrada) =>comidaRegistrada.calorias)
+
+caloriasDiaria = calculadora("+",...arrayCalorias);
+console.log("Usted consumió: " + caloriasDiaria + " calorias en el día");
+
+
+
