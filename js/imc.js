@@ -16,7 +16,12 @@ const capitalizarPrimeraLetra = palabra => {
   while(palabra == null || palabra.trim() == ""){
     palabra = prompt(`Ingrese su dato correctamente`);
   }
- return (palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())}
+  let palabraSplit = palabra.toLowerCase().split(" ");
+  for (let i = 0; i < palabraSplit.length; i++) {
+    palabraSplit[i] = palabraSplit[i].charAt(0).toUpperCase() + palabraSplit[i].substring(1);     
+  }
+   return  palabraSplit.join(' '); 
+}
 
 const definirComposicionCorporal = imc => {
   if (imc < 18.5) {

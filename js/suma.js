@@ -11,13 +11,25 @@ const capitalizarPrimeraLetra = palabra => {
   while(palabra == null || palabra.trim() == ""){
     palabra = prompt(`Ingrese su dato correctamente`);
   }
- return (palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())}
+  let palabraSplit = palabra.toLowerCase().split(" ");
+  for (let i = 0; i < palabraSplit.length; i++) {
+    palabraSplit[i] = palabraSplit[i].charAt(0).toUpperCase() + palabraSplit[i].substring(1);     
+  }
+   return  palabraSplit.join(' '); 
+}
 
 function verificarCantidadDeComidas(cantidadDeComidas) {
   while (cantidadDeComidas == 0 || Number.isNaN(cantidadDeComidas)) {
-    altura = Number(prompt("Ingrese su cantidad de Comidas correctamente"));
+    cantidadDeComidas = Number(prompt("Ingrese su cantidad de Comidas correctamente"));
   }
-  return altura;
+  return cantidadDeComidas;
+}
+
+function verificarCalorias(calorias) {
+  while (calorias == 0 || Number.isNaN(calorias)) {
+    calorias = Number(prompt("Ingrese el número de calorias correctamente"));
+  }
+  return calorias;
 }
 
 const suma = (...numeros) => {
@@ -62,9 +74,9 @@ function calculadora(operacion, ...numeros) {
 cantidadDeComidas = verificarCantidadDeComidas(Number(prompt("Ingrese cuántas comidas realizó")));
 for (let index = 0; index < cantidadDeComidas; index++) {
    comida = capitalizarPrimeraLetra(prompt("Ingrese el nombre de su comida"));
-   calorias = Number(prompt("Ingrese las calorias de su comida"));  
-   const registro = new comidaRegistrada(comida,calorias);
-   registrosDeComida.push(registro);
+   calorias = verificarCalorias(Number(prompt("Ingrese las calorias de su comida")));  
+   const comidaDelDia = new comidaRegistrada(comida,calorias);
+   registrosDeComida.push(comidaDelDia);
 }
 
 console.log(registrosDeComida);
@@ -76,6 +88,5 @@ console.log(registrosDeComida);
 
 caloriasDiaria = calculadora("+",...arrayCalorias);
 console.log("Usted consumió: " + caloriasDiaria + " calorias en el día");
-
 
 
