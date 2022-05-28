@@ -18,7 +18,7 @@ const capitalizarPrimeraLetra = palabra => {
   }
  return (palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())}
 
-const definirComposicionCorporal = (imc) => {
+const definirComposicionCorporal = imc => {
   if (imc < 18.5) {
     alert("Composición corporal: Peso inferior al normal");
   } else if (imc > 18.5 && imc < 24.9) {

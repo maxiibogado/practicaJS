@@ -7,6 +7,19 @@ class comidaRegistrada{
 
 registrosDeComida = []; 
 
+const capitalizarPrimeraLetra = palabra => {
+  while(palabra == null || palabra.trim() == ""){
+    palabra = prompt(`Ingrese su dato correctamente`);
+  }
+ return (palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())}
+
+function verificarCantidadDeComidas(cantidadDeComidas) {
+  while (cantidadDeComidas == 0 || Number.isNaN(cantidadDeComidas)) {
+    altura = Number(prompt("Ingrese su cantidad de Comidas correctamente"));
+  }
+  return altura;
+}
+
 const suma = (...numeros) => {
   let resultadoSuma = 0;
   numeros.forEach((numero) => (resultadoSuma += numero));
@@ -46,9 +59,9 @@ function calculadora(operacion, ...numeros) {
 }
 
 
-cantidadDeComidas = Number(prompt("Ingrese cuántas comidas realizó"))
+cantidadDeComidas = verificarCantidadDeComidas(Number(prompt("Ingrese cuántas comidas realizó")));
 for (let index = 0; index < cantidadDeComidas; index++) {
-   comida = prompt("Ingrese el nombre de su comida");
+   comida = capitalizarPrimeraLetra(prompt("Ingrese el nombre de su comida"));
    calorias = Number(prompt("Ingrese las calorias de su comida"));  
    const registro = new comidaRegistrada(comida,calorias);
    registrosDeComida.push(registro);
