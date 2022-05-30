@@ -189,8 +189,8 @@ if (confirm("¿Desea realizar algún filtro de búsqueda?")) {
     filtroARealizar = Number(prompt(`Ingrese el filtro a realizar
                             1: Filtro por nombre
                             2: Filtro por precio
-                            3: Filtro de productos de menor a mayor precio
-                            4: Filtro de productos de mayor a menor precio`));
+                            3: Filtro por productos de menor a mayor precio
+                            4: Filtro por productos de mayor a menor precio`));
     switch (filtroARealizar) {
         case 1:
             filtroPorNombre();
