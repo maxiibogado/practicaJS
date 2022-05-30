@@ -185,7 +185,7 @@ function filtrodeMayorAMenorPrecio() {
 }
 
 
-if (confirm("Desea realizar algún filtro de busqueda")) {
+if (confirm("¿Desea realizar algún filtro de búsqueda?")) {
     filtroARealizar = Number(prompt(`Ingrese el filtro a realizar
                             1: Filtro por nombre
                             2: Filtro por precio
