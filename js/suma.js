@@ -84,9 +84,9 @@ console.log(registrosDeComida);
 //caloriasTotales = registrosDeComida.reduce((acumulador,comidaRegistrada) => comidaRegistrada.calorias + acumulador,0);
 //console.log("Usted consumió: " + caloriasTotales + " calorias en el día");
 
- const arrayCalorias = registrosDeComida.map((comidaRegistrada) =>comidaRegistrada.calorias)
+const arrayCalorias = registrosDeComida.map((comidaRegistrada) =>comidaRegistrada.calorias)
 
 caloriasDiaria = calculadora("+",...arrayCalorias);
-console.log("Usted consumió: " + caloriasDiaria + " calorias en el día");
+alert("Usted consumió: " + caloriasDiaria + " calorias en el día");
 
 
