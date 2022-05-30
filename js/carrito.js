@@ -175,12 +175,12 @@ function filtroPorPrecio() {
 }
 
 function filtroDeMenorAMayorPrecio() {
-    nuestrosProductos.sort((a, b) => a.precio - b.precio);  // [ 1, 5, 40, 200 ]
+    nuestrosProductos.sort((a, b) => a.precio - b.precio);  
     console.log(nuestrosProductos)
 }
 
 function filtrodeMayorAMenorPrecio() {
-    nuestrosProductos.sort((a, b) => b.precio - a.precio);  // [ 1, 5, 40, 200 ]
+    nuestrosProductos.sort((a, b) => b.precio - a.precio);  
     console.log(nuestrosProductos);
 }
 
