@@ -83,6 +83,17 @@ const nuestrosProductos = [
   mancuernaProfesional,
 ];
 
+const capitalizarPrimeraLetra = palabra => {
+  while(palabra == null || palabra.trim() == ""){
+    palabra = prompt(`Ingrese su dato correctamente`);
+  }
+  let palabraSplit = palabra.toLowerCase().split(" ");
+  for (let i = 0; i < palabraSplit.length; i++) {
+    palabraSplit[i] = palabraSplit[i].charAt(0).toUpperCase() + palabraSplit[i].substring(1);     
+  }
+   return  palabraSplit.join(' '); 
+}
+
 function precioTotalCarrito(carrito) {
   return carrito.reduce(
     (acumulador, elemento) => elemento.precio + acumulador,
@@ -106,12 +117,15 @@ function agregarProductoAlCarrito() {
       );
       switch (productoUsuario) {
         case 1:
-          carritoDeCompras.push(pelota1);
+        alert("Su producto ha sido agregado al carrito correctamente")  
+        carritoDeCompras.push(pelota1);
           break;
         case 2:
+          alert("Su producto ha sido agregado al carrito correctamente")  
           carritoDeCompras.push(pelota2);
           break;
         case 3:
+          alert("Su producto ha sido agregado al carrito correctamente")  
           carritoDeCompras.push(pelota3);
           break;
       }
@@ -127,13 +141,16 @@ function agregarProductoAlCarrito() {
       );
       switch (productoUsuario) {
         case 1:
-          carritoDeCompras.push(mancuerna);
+        alert("Su producto ha sido agregado al carrito correctamente");    
+        carritoDeCompras.push(mancuerna);
           break;
         case 2:
-          carritoDeCompras.push(mancuernaPrincipiante);
+        alert("Su producto ha sido agregado al carrito correctamente")  
+        carritoDeCompras.push(mancuernaPrincipiante);
           break;
         case 3:
-          carritoDeCompras.push(mancuernaPrincipiante);
+        alert("Su producto ha sido agregado al carrito correctamente")  
+        carritoDeCompras.push(mancuernaPrincipiante);
           break;
       }
   }
@@ -142,22 +159,33 @@ function agregarProductoAlCarrito() {
     agregarProductoAlCarrito();
   } else {
     alert(
-      "Finalizo Compra, su total es de $" + precioTotalCarrito(carritoDeCompras)
+      "Finalizó su compra, su total es de $" + precioTotalCarrito(carritoDeCompras)
     );
     console.log(carritoDeCompras);
   }
 }
 
 function filtroPorNombre() {
-    productoSeleccionadoPorNombre = prompt("Ingrese el producto a buscar");
-    const productoBuscadoPorNombre = nuestrosProductos.filter((producto) =>
+    productoSeleccionadoPorNombre = capitalizarPrimeraLetra(prompt("Ingrese el producto a buscar"));
+    const productoBuscadoPorNombre = nuestrosProductos.find((producto) =>
       producto.nombre.includes(productoSeleccionadoPorNombre)
     );
-    if (productoBuscadoPorNombre.length == 0) {
+    if (typeof productoBuscadoPorNombre == 'undefined') {
       alert("No hay coincidencia en la búsqueda");
+      inicioPrograma();
     } else {
-      console.log(productoBuscadoPorNombre);
+      console.log("Esté es el resultado de su busqueda: ",productoBuscadoPorNombre);
+      if (confirm("¿Desea agregarlo al carrito")) {
+        carritoDeCompras.push(productoBuscadoPorNombre);
+        alert("Se ha agregado el producto correctamente.");
+        inicioPrograma();
+      } else {
+        inicioPrograma();
+      }    
     }
+
+
+
 }
 function filtroPorPrecio() {
     productoSeleccionadoPorPrecio = Number(
@@ -184,13 +212,44 @@ function filtrodeMayorAMenorPrecio() {
     console.log(nuestrosProductos);
 }
 
+function filtrodeAZ() {
+  nuestrosProductos.sort(function (a, b) {
+    if (a.nombre > b.nombre) {
+      return 1;
+    }
+    if (a.nombre < b.nombre) {
+      return -1;
+    }
+    // a must be equal to b
+    return 0;
+  });
+  console.log(nuestrosProductos);
+}
+function filtrodeZA() {
+  nuestrosProductos.sort(function (a, b) {
+    if (a.nombre > b.nombre) {
+      return -1;
+    }
+    if (a.nombre < b.nombre) {
+      return 1;
+    }
+    // a must be equal to b
+    return 0;
+  });
 
-if (confirm("¿Desea realizar algún filtro de búsqueda?")) {
-    filtroARealizar = Number(prompt(`Ingrese el filtro a realizar
-                            1: Filtro por nombre
-                            2: Filtro por precio
-                            3: Filtro por productos de menor a mayor precio
-                            4: Filtro por productos de mayor a menor precio`));
+
+  console.log(nuestrosProductos);
+}
+
+function filtroDeBusqueda() {
+ 
+  filtroARealizar = Number(prompt(`Ingrese el filtro a realizar
+                            1: Filtro por nombre.
+                            2: Filtro por precio.
+                            3: Precio: Menor a Mayor.
+                            4: Precio: Mayor a Menor.
+                            5: Filtro de A - Z.
+                            6: Filtro de Z- A.`));
     switch (filtroARealizar) {
         case 1:
             filtroPorNombre();
@@ -203,11 +262,40 @@ if (confirm("¿Desea realizar algún filtro de búsqueda?")) {
             break;
         case 4:
             filtrodeMayorAMenorPrecio();
-            break;        
+            break;
+        case 5:
+            filtrodeAZ();
+            break;
+        case 6:
+            filtrodeZA();                
         default:
+            alert("Eligió un número incorrecto");
+            filtroDeBusqueda();
             break;
     }                        
        
-} else {
-  agregarProductoAlCarrito();
+  } 
+  
+  
+
+
+function inicioPrograma() {
+   opciónUsuario = Number(prompt(`Ingrese la opción deseada
+              1: Realizar filtro de búsqueda.
+              2: Agregar productos al carrito sin filtros.`));
+   switch (opciónUsuario) {
+     case 1:
+            filtroDeBusqueda();
+            break;
+     case 2: 
+            agregarProductoAlCarrito();
+            break;
+     default:
+            alert("Lo sentimos, no contamos con esa opción. Ingrese una opción correctamente.");
+            inicioPrograma();
+            break;
+   }           
+
 }
+
+inicioPrograma();
