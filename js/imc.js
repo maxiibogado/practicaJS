@@ -2,6 +2,9 @@
 
 personasRegistradasDia = [];
 personasRegistradasSistema = [];
+personaRegistrada = [];
+
+
 
 class Persona {
   constructor(dni,nombre, apellido, estatura, peso,imc) {
@@ -21,6 +24,60 @@ const persona4 = new Persona(14209164,"Marciano", "Bogado",1.75,80,27.43);
 
 personasRegistradasSistema = [persona1,persona2,persona3,persona4];
 
+function implementarDom() {
+  const tbody = document.querySelector('tbody');
+personasRegistradasSistema.forEach((persona) => {
+  const tr = document.createElement('tr')
+  tr.innerHTML = ` 
+  <th scope="col">#</th>
+  <td>${persona.dni}</td>
+  <td>${persona.nombre}</td>
+  <td>${persona.apellido}</td>
+  <td>${persona.estatura}</td>
+  <td>${persona.peso}</td>
+  <td>${persona.imc}</td>
+  `
+  tbody.append(tr);
+});
+}
+
+
+const btnAgregarPaciente = document.querySelector('#addPaciente')
+btnAgregarPaciente.addEventListener('click', agregarPaciente);
+const btnBorrarPaciente = document.querySelector('#borrarPaciente')
+btnBorrarPaciente.addEventListener('click', borrarUltimoPaciente);
+
+function agregarPaciente() {
+  dni = verificarDato(Number(prompt("Ingrese su DNI sin guiones ni puntos")));
+  nombre = datoSinEspacio(capitalizarPrimeraLetra(prompt("Ingrese su nombre")));
+  apellido = datoSinEspacio(capitalizarPrimeraLetra(prompt("Ingrese su apellido")));
+  estatura = verificarDato(Number(prompt("Ingrese su estatura en metros")));
+  peso = verificarDato(Number(prompt("Ingrese su peso en KG")));
+  imc = calcularIMC(peso, estatura);
+  const paciente = new Persona(dni,nombre, apellido, estatura, peso,imc);
+  personaRegistrada.push(paciente);
+  console.log(personaRegistrada)
+  const tbody = document.querySelector('tbody');
+  personaRegistrada.forEach((persona) => {
+  const tr = document.createElement('tr')
+  tr.innerHTML = ` 
+  <th scope="col">#</th>
+  <td>${persona.dni}</td>
+  <td>${persona.nombre}</td>
+  <td>${persona.apellido}</td>
+  <td>${persona.estatura}</td>
+  <td>${persona.peso}</td>
+  <td>${persona.imc}</td>
+  `
+  tbody.append(tr);
+});
+
+}
+
+function borrarUltimoPaciente() {
+  personasRegistradasSistema.pop();
+  console.log("El último paciente ha sido borrado");
+}
 
 
 const capitalizarPrimeraLetra = palabra => {
@@ -194,4 +251,6 @@ function filtroDeBusqueda() {
   }
 }
 
-inicioPrograma();
+//inicioPrograma();
+
+implementarDom()
