@@ -26,10 +26,11 @@ personasRegistradasSistema = [persona1,persona2,persona3,persona4];
 
 function implementarDom() {
   const tbody = document.querySelector('tbody');
-personasRegistradasSistema.forEach((persona) => {
+personasRegistradasSistema.forEach((persona,i) => {
   const tr = document.createElement('tr')
+  
   tr.innerHTML = ` 
-  <th scope="col">#</th>
+  <th scope="col">${i+1}</th>
   <td>${persona.dni}</td>
   <td>${persona.nombre}</td>
   <td>${persona.apellido}</td>
@@ -61,7 +62,7 @@ function agregarPaciente() {
   personaRegistrada.forEach((persona) => {
   const tr = document.createElement('tr')
   tr.innerHTML = ` 
-  <th scope="col">#</th>
+  <th scope="col">${personasRegistradasSistema.length + 1}</th>
   <td>${persona.dni}</td>
   <td>${persona.nombre}</td>
   <td>${persona.apellido}</td>
@@ -76,7 +77,7 @@ function agregarPaciente() {
 
 function borrarUltimoPaciente() {
   personasRegistradasSistema.pop();
-  console.log("El último paciente ha sido borrado");
+  alert("El último paciente ha sido borrado. Pronto será eliminado de la tabla.");
 }
 
 
