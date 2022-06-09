@@ -135,18 +135,20 @@ function borrarUltimoPaciente() {
 
   arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
   arrayPersonasRegistradas.pop();
-
     const listaTr = document.querySelectorAll("tr");
-    listaTr.forEach((elemento,i) =>{
-     if (i== arrayPersonasRegistradas.length-1) {
-       elemento.remove();
-     }
-    }) 
+    console.log(listaTr)
 
-    localStorage.setItem(
-      "personasRegistradas",
-      JSON.stringify(arrayPersonasRegistradas)
-    );
+        listaTr.forEach((elemento,i) =>{
+        if (i == listaTr.length-1 && i != 0) {
+        elemento.remove();
+        }})
+
+      
+
+     localStorage.setItem(
+       "personasRegistradas",
+       JSON.stringify(arrayPersonasRegistradas)
+     );
 
 }
 
