@@ -1,7 +1,7 @@
 //* Calculo del IMC
 
 personasRegistradasDia = [];
-personasRegistradasSistema = [];
+//personasRegistradasSistema = [];
 personaRegistrada = [];
 
 class Persona {
@@ -40,11 +40,32 @@ const persona3 = new Persona(
   22.49
 );
 const persona4 = new Persona(14209164, "Marciano", "Bogado", 1.75, 80, 27.43);
-personasRegistradasSistema = [persona1, persona2, persona3, persona4];
+//personasRegistradasSistema = [persona1, persona2, persona3, persona4];
+
+const borrarListadoPacientes = () => {
+  if (localStorage.getItem('personasRegistradas')) {
+    localStorage.removeItem('personasRegistradas')
+  } 
+    arrayPersonasRegistradas = [];
+
+  const listaTr = document.querySelectorAll("tr");
+    listaTr.forEach((elemento,i) =>{
+     if (i!= 0) {
+       elemento.remove();
+     }
+    }) 
+}
 
 function implementarDom() {
+  if (localStorage.getItem("personasRegistradas")) {
+    arrayPersonasRegistradas = JSON.parse(
+      localStorage.getItem("personasRegistradas")
+    );
+  } else {
+    arrayPersonasRegistradas = [];
+  }
   const tbody = document.querySelector("tbody");
-  personasRegistradasSistema.forEach((persona, i) => {
+  arrayPersonasRegistradas.forEach((persona, i) => {
     const tr = document.createElement("tr");
 
     tr.innerHTML = ` 
@@ -64,6 +85,10 @@ const btnAgregarPaciente = document.querySelector("#addPaciente");
 btnAgregarPaciente.addEventListener("click", agregarPaciente);
 const btnBorrarPaciente = document.querySelector("#borrarPaciente");
 btnBorrarPaciente.addEventListener("click", borrarUltimoPaciente);
+const btnBorrarListadoDePaciente = document.querySelector("#borrarListaDePacientes");
+console.log(btnBorrarListadoDePaciente)
+btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
+
 
 
 
@@ -77,13 +102,23 @@ function agregarPaciente() {
   peso = verificarDato(Number(prompt("Ingrese su peso en KG")));
   imc = calcularIMC(peso, estatura);
   const paciente = new Persona(dni, nombre, apellido, estatura, peso, imc);
+  arrayPersonasRegistradas.push(paciente);
   personaRegistrada.push(paciente);
-  console.log(personaRegistrada);
+  console.log(arrayPersonasRegistradas);
+  console.log(personaRegistrada)
+  localStorage.setItem(
+    "personasRegistradas",
+    JSON.stringify(arrayPersonasRegistradas)
+  );
+  localStorage.setItem(
+    "personaRegistradaDia",
+    JSON.stringify(personaRegistrada)
+  );
   const tbody = document.querySelector("tbody");
   personaRegistrada.forEach((persona) => {
     const tr = document.createElement("tr");
     tr.innerHTML = ` 
-  <th scope="col">${personasRegistradasSistema.length + 1}</th>
+  <th scope="col">${arrayPersonasRegistradas.length}</th>
   <td>${persona.dni}</td>
   <td>${persona.nombre}</td>
   <td>${persona.apellido}</td>
@@ -93,20 +128,33 @@ function agregarPaciente() {
   `;
     tbody.append(tr);
   });
+  personaRegistrada = [];
 }
 
 function borrarUltimoPaciente() {
-  personasRegistradasSistema.pop();
-  alert(
-    "El último paciente ha sido borrado. Pronto será eliminado de la tabla."
-  );
+
+  arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
+  arrayPersonasRegistradas.pop();
+
+    const listaTr = document.querySelectorAll("tr");
+    listaTr.forEach((elemento,i) =>{
+     if (i== arrayPersonasRegistradas.length-1) {
+       elemento.remove();
+     }
+    }) 
+
+    localStorage.setItem(
+      "personasRegistradas",
+      JSON.stringify(arrayPersonasRegistradas)
+    );
+
 }
 
 function modificarTitulo() {
-  let titulo = document.querySelector('#tituloPrincipal');
+  let titulo = document.querySelector("#tituloPrincipal");
   console.log(titulo);
-  titulo.style.color = 'blueviolet';
-  titulo.style.textAlign = 'center'
+  titulo.style.color = "blueviolet";
+  titulo.style.textAlign = "center";
 }
 
 const capitalizarPrimeraLetra = (palabra) => {
