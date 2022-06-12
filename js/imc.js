@@ -49,7 +49,7 @@ const borrarListadoPacientes = () => {
     arrayPersonasRegistradas = [];
 
   const listaTr = document.querySelectorAll("tr");
-    listaTr.forEach((elemento,i) =>{
+     listaTr.forEach((elemento,i) =>{
      if (i!= 0) {
        elemento.remove();
      }
@@ -78,29 +78,67 @@ function implementarDom() {
   <td>${persona.imc}</td>
   `;
     tbody.append(tr);
+
+    // if (persona.imc <25) {
+    //   const imcaprocesar = document.querySelector("#imcaprocesar")
+    //   imcaprocesar.style.backgroundColor = 'green'
+    // } else  if (persona.imc > 25 && persona.imc < 30) {
+    //     const imcaprocesar = document.querySelector("#imcaprocesar")
+    //     imcaprocesar.style.backgroundColor = 'green'
+    // } else {
+    //   const imcaprocesar = document.querySelector("#imcaprocesar")
+    //   imcaprocesar.style.backgroundColor = 'red'
+    // }
+
   });
 }
 
 const btnAgregarPaciente = document.querySelector("#addPaciente");
 btnAgregarPaciente.addEventListener("click", agregarPaciente);
+const btnLimpiarFormulario = document.querySelector('limpiarForm');
+btnLimpiarFormulario.addEventListener("click",limpiarFormulario);
 const btnBorrarPaciente = document.querySelector("#borrarPaciente");
 btnBorrarPaciente.addEventListener("click", borrarUltimoPaciente);
 const btnBorrarListadoDePaciente = document.querySelector("#borrarListaDePacientes");
-console.log(btnBorrarListadoDePaciente)
 btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
 
+
+const limpiarFormulario = () => {
+  document.querySelector("#dni").value = "";
+  document.querySelector("#nombre").value = "";
+  document.querySelector("#apellido").value = "";
+  document.querySelector("#estatura").value = "";
+  document.querySelector("#peso").value = "";   
+}
+
+
+
+
+
+function definirEstilo(persona) {
+  if (persona.imc < 25) {
+    return   `<td  style="color:green">${persona.imc}</td>`
+  } else  if (persona.imc > 25 && persona.imc < 30) {
+    return   `<td  style="color:yellow">${persona.imc}</td>`
+  }
+  else {
+    return   `<td style="color:yellow">${persona.imc}</td>`
+  }
+}
 
 
 
 function agregarPaciente() {
-  dni = verificarDato(Number(prompt("Ingrese su DNI sin guiones ni puntos")));
-  nombre = datoSinEspacio(capitalizarPrimeraLetra(prompt("Ingrese su nombre")));
+
+  dni = verificarDato(Number(document.querySelector("#dni").value));
+  nombre = datoSinEspacio(capitalizarPrimeraLetra(document.querySelector("#nombre").value));
   apellido = datoSinEspacio(
-    capitalizarPrimeraLetra(prompt("Ingrese su apellido"))
+    capitalizarPrimeraLetra(document.querySelector("#apellido").value)
   );
-  estatura = verificarDato(Number(prompt("Ingrese su estatura en metros")));
-  peso = verificarDato(Number(prompt("Ingrese su peso en KG")));
-  imc = calcularIMC(peso, estatura);
+  estatura = verificarDato(Number(document.querySelector("#estatura").value));
+  peso = verificarDato(Number(document.querySelector("#peso").value));
+  imc = calcularIMC(peso, estatura)
+
   const paciente = new Persona(dni, nombre, apellido, estatura, peso, imc);
   arrayPersonasRegistradas.push(paciente);
   personaRegistrada.push(paciente);
@@ -114,9 +152,13 @@ function agregarPaciente() {
     "personaRegistradaDia",
     JSON.stringify(personaRegistrada)
   );
+
+
   const tbody = document.querySelector("tbody");
   personaRegistrada.forEach((persona) => {
     const tr = document.createElement("tr");
+
+
     tr.innerHTML = ` 
   <th scope="col">${arrayPersonasRegistradas.length}</th>
   <td>${persona.dni}</td>
@@ -124,12 +166,38 @@ function agregarPaciente() {
   <td>${persona.apellido}</td>
   <td>${persona.estatura}</td>
   <td>${persona.peso}</td>
-  <td>${persona.imc}</td>
+  <td id="imcaprocesar">${persona.imc}</td>
   `;
     tbody.append(tr);
+    
+    const td = document.querySelectorAll("#imcaprocesar");
+
+    for (let index = 0; index < td.length; index++) {
+      if (persona.imc <25) {
+        const imcaprocesar = document.querySelectorAll("#imcaprocesar")
+
+        imcaprocesar[index].style.backgroundColor = 'green'
+      } else  if (persona.imc > 25 && persona.imc < 30) {
+          const imcaprocesar = document.querySelectorAll("#imcaprocesar")
+          imcaprocesar[index].style.backgroundColor = 'yellow'
+      } else {
+        const imcaprocesar = document.querySelectorAll("#imcaprocesar")
+        imcaprocesar[index].style.backgroundColor = 'red'
+      }      
+    }
+   
+   
+
   });
+
+  
+
+
   personaRegistrada = [];
 }
+
+
+
 
 function borrarUltimoPaciente() {
 
