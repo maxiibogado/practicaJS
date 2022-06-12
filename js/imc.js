@@ -79,6 +79,14 @@ function implementarDom() {
   }
   const tbody = document.querySelector("tbody");
   arrayPersonasRegistradas.forEach((persona, i) => {
+    if (persona.imc <25) {
+      color  = 'green';
+ } else  if (persona.imc > 25 && persona.imc < 30) {
+      color = 'yellow';
+ } else {
+    color  = 'red';
+ }  
+    
     const tr = document.createElement("tr");
 
     tr.innerHTML = ` 
@@ -88,7 +96,7 @@ function implementarDom() {
   <td>${persona.apellido}</td>
   <td>${persona.estatura}</td>
   <td>${persona.peso}</td>
-  <td>${persona.imc}</td>
+  <td style="color:${color}">${persona.imc}</td>
   `;
     tbody.append(tr);
 
@@ -161,6 +169,10 @@ function agregarPaciente() {
   peso = verificarDato(Number(document.querySelector("#peso").value));
   imc = calcularIMC(peso, estatura)
 
+    
+  
+
+
   const paciente = new Persona(dni, nombre, apellido, estatura, peso, imc);
   arrayPersonasRegistradas.push(paciente);
   personaRegistrada.push(paciente);
@@ -178,6 +190,15 @@ function agregarPaciente() {
 
   const tbody = document.querySelector("tbody");
   personaRegistrada.forEach((persona) => {
+    if (imc <25) {
+       color  = 'green';
+  } else  if (imc > 25 && imc < 30) {
+       color = 'yellow';
+  } else {
+     color  = 'red';
+  }  
+
+
     const tr = document.createElement("tr");
 
 
@@ -188,35 +209,38 @@ function agregarPaciente() {
   <td>${persona.apellido}</td>
   <td>${persona.estatura}</td>
   <td>${persona.peso}</td>
-  <td id="imcaprocesar">${persona.imc}</td>
-  `;
+  <td style="color:${color}">${persona.imc}</td>
+  `;  
     tbody.append(tr);
     
     const td = document.querySelectorAll("#imcaprocesar");
+    console.log()
 
-    for (let index = 0; index < td.length; index++) {
-      if (persona.imc <25) {
-        const imcaprocesar = document.querySelectorAll("#imcaprocesar")
 
-        imcaprocesar[index].style.backgroundColor = 'green'
-      } else  if (persona.imc > 25 && persona.imc < 30) {
-          const imcaprocesar = document.querySelectorAll("#imcaprocesar")
-          imcaprocesar[index].style.backgroundColor = 'yellow'
-      } else {
-        const imcaprocesar = document.querySelectorAll("#imcaprocesar")
-        imcaprocesar[index].style.backgroundColor = 'red'
-      }      
-    }
+
+    // for (let index = 0; index < td.length; index++) {
+    //   if (persona.imc <25) {
+      //     const imcaprocesar = document.querySelectorAll("#imcaprocesar")
+
+    //     imcaprocesar[index].style.backgroundColor = 'green'
+    //   } else  if (persona.imc > 25 && persona.imc < 30) {
+    //       const imcaprocesar = document.querySelectorAll("#imcaprocesar")
+    //       imcaprocesar[index].style.backgroundColor = 'yellow'
+    //   } else {
+    //     const imcaprocesar = document.querySelectorAll("#imcaprocesar")
+    //     imcaprocesar[index].style.backgroundColor = 'red'
+    //   }      
+    // }
    
-   
+
 
   });
 
-  
-
-
   personaRegistrada = [];
+
 }
+
+
 
 
 
