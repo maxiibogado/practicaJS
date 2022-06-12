@@ -56,6 +56,19 @@ const borrarListadoPacientes = () => {
     }) 
 }
 
+const capitalizarPrimeraLetra = (palabra) => {
+  while (palabra == null || palabra.trim() == "") {
+    palabra = prompt(`Ingrese su dato correctamente`);
+  }
+  let palabraSplit = palabra.toLowerCase().split(" ");
+  for (let i = 0; i < palabraSplit.length; i++) {
+    palabraSplit[i] =
+      palabraSplit[i].charAt(0).toUpperCase() + palabraSplit[i].substring(1);
+  }
+  return palabraSplit.join(" ");
+};
+
+
 function implementarDom() {
   if (localStorage.getItem("personasRegistradas")) {
     arrayPersonasRegistradas = JSON.parse(
@@ -93,23 +106,32 @@ function implementarDom() {
   });
 }
 
-const btnAgregarPaciente = document.querySelector("#addPaciente");
-btnAgregarPaciente.addEventListener("click", agregarPaciente);
-const btnLimpiarFormulario = document.querySelector('limpiarForm');
-btnLimpiarFormulario.addEventListener("click",limpiarFormulario);
-const btnBorrarPaciente = document.querySelector("#borrarPaciente");
-btnBorrarPaciente.addEventListener("click", borrarUltimoPaciente);
-const btnBorrarListadoDePaciente = document.querySelector("#borrarListaDePacientes");
-btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
-
-
 const limpiarFormulario = () => {
+  console.log(document.querySelector("#dni").value)
   document.querySelector("#dni").value = "";
   document.querySelector("#nombre").value = "";
   document.querySelector("#apellido").value = "";
   document.querySelector("#estatura").value = "";
   document.querySelector("#peso").value = "";   
 }
+
+
+
+
+const btnAgregarPaciente = document.querySelector("#addPaciente");
+btnAgregarPaciente.addEventListener("click", agregarPaciente);
+const btnLimpiarFormulario = document.querySelector('#limpiarForm');
+if (btnLimpiarFormulario) {
+  console.log(limpiarFormulario)
+  btnLimpiarFormulario.addEventListener("click",limpiarFormulario);
+}
+const btnBorrarPaciente = document.querySelector("#borrarPaciente");
+btnBorrarPaciente.addEventListener("click", borrarUltimoPaciente);
+const btnBorrarListadoDePaciente = document.querySelector("#borrarListaDePacientes");
+btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
+
+
+
 
 
 
@@ -199,6 +221,9 @@ function agregarPaciente() {
 
 
 
+
+
+
 function borrarUltimoPaciente() {
 
   arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
@@ -227,17 +252,6 @@ function modificarTitulo() {
   titulo.style.textAlign = "center";
 }
 
-const capitalizarPrimeraLetra = (palabra) => {
-  while (palabra == null || palabra.trim() == "") {
-    palabra = prompt(`Ingrese su dato correctamente`);
-  }
-  let palabraSplit = palabra.toLowerCase().split(" ");
-  for (let i = 0; i < palabraSplit.length; i++) {
-    palabraSplit[i] =
-      palabraSplit[i].charAt(0).toUpperCase() + palabraSplit[i].substring(1);
-  }
-  return palabraSplit.join(" ");
-};
 
 const definirComposicionCorporal = (imc) => {
   if (imc < 18.5) {
