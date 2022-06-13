@@ -123,6 +123,9 @@ const btnBorrarPaciente = document.querySelector("#borrarPaciente");
 btnBorrarPaciente.addEventListener("click", borrarUltimoPaciente);
 const btnBuscarImcMaximo = document.querySelector("#imcMaximo");
 btnBuscarImcMaximo.addEventListener("click", buscarImcMaximo);
+const btnBuscarImcMinimo = document.querySelector("#imcMinimo");
+btnBuscarImcMinimo.addEventListener("click", buscarImcMinimo);
+
 
 const btnBorrarListadoDePaciente = document.querySelector("#borrarListaDePacientes");
 btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
@@ -341,15 +344,25 @@ function buscarImcMayores() {
   inicioPrograma();
 }
 
-function buscarImcMaximo() {
+function buscarImcMaximo(e) {
+  e.target.removeEventListener(e.type, buscarImcMaximo);
   arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
   if (arrayPersonasRegistradas) {
     const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
     imcMaximo = Math.max(...arrayImc);
-    const personaImcMaximo = arrayPersonasRegistradas.find(persona => persona.imc = imcMaximo);
+    console.log(arrayImc)
+    const personaImcMaximo = arrayPersonasRegistradas.find(persona => persona.imc == imcMaximo);
+    console.log(personaImcMaximo)
     const table = document.createElement("table");
     table.className = "table"
     
+    if (imcMaximo <25) {
+      color  = 'green';
+ } else  if (imcMaximo > 25 && imcMaximo < 30) {
+      color = 'yellow';
+ } else {
+    color  = 'red';
+ }  
 
     table.innerHTML =`
       <thead>
@@ -370,7 +383,7 @@ function buscarImcMaximo() {
        <td scope="col">${personaImcMaximo.apellido}</td>
        <td scope="col">${personaImcMaximo.estatura}</td>
        <td scope="col">${personaImcMaximo.peso}</td>
-       <td scope="col">${personaImcMaximo.imc}</td>
+       <td  style="color:${color}" scope="col">${personaImcMaximo.imc}</td>
       </tbody>
          `;
 
@@ -380,11 +393,51 @@ function buscarImcMaximo() {
   }
 }
 
-function buscarImcMinimo() {
-  const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
-  imcMinimo = Math.min(...arrayImc);
-  alert("El IMC mínimo es: " + imcMinimo);
-  inicioPrograma();
+function buscarImcMinimo(e) {
+  e.target.removeEventListener(e.type, buscarImcMinimo);
+  arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
+  if (arrayPersonasRegistradas) {
+    const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
+    imcMinimo = Math.min(...arrayImc);
+    const personaImcMinimo = arrayPersonasRegistradas.find(persona => persona.imc == imcMinimo);
+    const table = document.createElement("table");
+    table.className = "table"
+    
+    if (imcMinimo <25) {
+      color  = 'green';
+ } else  if (imcMinimo > 25 && imcMinimo < 30) {
+      color = 'yellow';
+ } else {
+    color  = 'red';
+ }  
+
+    table.innerHTML =`
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">DNI</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellido</th>
+          <th scope="col">Estatura(Metros)</th>
+          <th scope="col">Peso(KG)</th>
+          <th scope="col">IMC</th>
+        </tr>
+      </thead>
+       <tbody>
+       <td scope="col">ID</td>
+       <td scope="col">${personaImcMinimo.dni}</td>
+       <td scope="col">${personaImcMinimo.nombre}</td>
+       <td scope="col">${personaImcMinimo.apellido}</td>
+       <td scope="col">${personaImcMinimo.estatura}</td>
+       <td scope="col">${personaImcMinimo.peso}</td>
+       <td  style="color:${color}" scope="col">${personaImcMinimo.imc}</td>
+      </tbody>
+         `;
+
+    document.body.appendChild(table);
+  } else {
+    alert("Ingrese pacientes para utilizar la función");
+  }
 }
 
 function inicioPrograma() {
