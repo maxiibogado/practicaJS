@@ -1,7 +1,6 @@
 //* Calculo del IMC
 
 personasRegistradasDia = [];
-//personasRegistradasSistema = [];
 personaRegistrada = [];
 
 class Persona {
@@ -40,7 +39,6 @@ const persona3 = new Persona(
   22.49
 );
 const persona4 = new Persona(14209164, "Marciano", "Bogado", 1.75, 80, 27.43);
-//personasRegistradasSistema = [persona1, persona2, persona3, persona4];
 
 const borrarListadoPacientes = () => {
   if (localStorage.getItem('personasRegistradas')) {
@@ -99,18 +97,6 @@ function implementarDom() {
   <td style="color:${color}">${persona.imc}</td>
   `;
     tbody.append(tr);
-
-    // if (persona.imc <25) {
-    //   const imcaprocesar = document.querySelector("#imcaprocesar")
-    //   imcaprocesar.style.backgroundColor = 'green'
-    // } else  if (persona.imc > 25 && persona.imc < 30) {
-    //     const imcaprocesar = document.querySelector("#imcaprocesar")
-    //     imcaprocesar.style.backgroundColor = 'green'
-    // } else {
-    //   const imcaprocesar = document.querySelector("#imcaprocesar")
-    //   imcaprocesar.style.backgroundColor = 'red'
-    // }
-
   });
 }
 
@@ -135,8 +121,12 @@ if (btnLimpiarFormulario) {
 }
 const btnBorrarPaciente = document.querySelector("#borrarPaciente");
 btnBorrarPaciente.addEventListener("click", borrarUltimoPaciente);
+const btnBuscarImcMaximo = document.querySelector("#imcMaximo");
+btnBuscarImcMaximo.addEventListener("click", buscarImcMaximo);
+
 const btnBorrarListadoDePaciente = document.querySelector("#borrarListaDePacientes");
 btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
+
 
 
 
@@ -213,27 +203,8 @@ function agregarPaciente() {
   `;  
     tbody.append(tr);
     
-    const td = document.querySelectorAll("#imcaprocesar");
-    console.log()
-
-
-
-    // for (let index = 0; index < td.length; index++) {
-    //   if (persona.imc <25) {
-      //     const imcaprocesar = document.querySelectorAll("#imcaprocesar")
-
-    //     imcaprocesar[index].style.backgroundColor = 'green'
-    //   } else  if (persona.imc > 25 && persona.imc < 30) {
-    //       const imcaprocesar = document.querySelectorAll("#imcaprocesar")
-    //       imcaprocesar[index].style.backgroundColor = 'yellow'
-    //   } else {
-    //     const imcaprocesar = document.querySelectorAll("#imcaprocesar")
-    //     imcaprocesar[index].style.backgroundColor = 'red'
-    //   }      
-    // }
+    
    
-
-
   });
 
   personaRegistrada = [];
@@ -333,7 +304,7 @@ function buscarPaciente() {
   personaABuscar = capitalizarPrimeraLetra(
     prompt("Ingrese el nombre de la persona a buscar")
   );
-  const personaBuscadaPorNombre = personasRegistradasSistema.find((persona) =>
+  const personaBuscadaPorNombre = arrayPersonasRegistradas.find((persona) =>
     persona.nombre.includes(personaABuscar)
   );
   if (personaBuscadaPorNombre !== undefined) {
@@ -346,7 +317,7 @@ function buscarPaciente() {
 
 function buscarImcMenores() {
   imcTope = Number(prompt("Ingrese el imc de tope"));
-  const imcBuscadoPorTope = personasRegistradasSistema.filter(
+  const imcBuscadoPorTope = arrayPersonasRegistradas.filter(
     (persona) => persona.imc < imcTope
   );
   if (imcBuscadoPorTope.length == 0) {
@@ -359,7 +330,7 @@ function buscarImcMenores() {
 
 function buscarImcMayores() {
   imcTope = Number(prompt("Ingrese el imc de tope inferior"));
-  const imcBuscadoPorTope = personasRegistradasSistema.filter(
+  const imcBuscadoPorTope = arrayPersonasRegistradas.filter(
     (persona) => persona.imc > imcTope
   );
   if (imcBuscadoPorTope.length == 0) {
@@ -371,14 +342,46 @@ function buscarImcMayores() {
 }
 
 function buscarImcMaximo() {
-  const arrayImc = personasRegistradasSistema.map((persona) => persona.imc);
-  imcMaximo = Math.max(...arrayImc);
-  alert("El IMC máximo es: " + imcMaximo);
-  inicioPrograma();
+  arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
+  if (arrayPersonasRegistradas) {
+    const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
+    imcMaximo = Math.max(...arrayImc);
+    const personaImcMaximo = arrayPersonasRegistradas.find(persona => persona.imc = imcMaximo);
+    const table = document.createElement("table");
+    table.className = "table"
+    
+
+    table.innerHTML =`
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">DNI</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellido</th>
+          <th scope="col">Estatura(Metros)</th>
+          <th scope="col">Peso(KG)</th>
+          <th scope="col">IMC</th>
+        </tr>
+      </thead>
+       <tbody>
+       <td scope="col">ID</td>
+       <td scope="col">${personaImcMaximo.dni}</td>
+       <td scope="col">${personaImcMaximo.nombre}</td>
+       <td scope="col">${personaImcMaximo.apellido}</td>
+       <td scope="col">${personaImcMaximo.estatura}</td>
+       <td scope="col">${personaImcMaximo.peso}</td>
+       <td scope="col">${personaImcMaximo.imc}</td>
+      </tbody>
+         `;
+
+    document.body.appendChild(table);
+  } else {
+    alert("Ingrese pacientes para utilizar la función");
+  }
 }
 
 function buscarImcMinimo() {
-  const arrayImc = personasRegistradasSistema.map((persona) => persona.imc);
+  const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
   imcMinimo = Math.min(...arrayImc);
   alert("El IMC mínimo es: " + imcMinimo);
   inicioPrograma();
@@ -445,6 +448,7 @@ function filtroDeBusqueda() {
   }
 }
 
-inicioPrograma();
+
+implementarDom();
 
 modificarTitulo();
