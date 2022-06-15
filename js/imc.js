@@ -125,6 +125,11 @@ const btnBuscarImcMaximo = document.querySelector("#imcMaximo");
 btnBuscarImcMaximo.addEventListener("click", buscarImcMaximo);
 const btnBuscarImcMinimo = document.querySelector("#imcMinimo");
 btnBuscarImcMinimo.addEventListener("click", buscarImcMinimo);
+// const btnBuscarPorDni = document.querySelector("#dniPaciente");
+// btnBuscarPorDni.addEventListener("click", buscarPaciente);
+
+const searchBar = document.querySelector("#search"); 
+searchBar.addEventListener("input", buscarPorBarra )
 
 
 const btnBorrarListadoDePaciente = document.querySelector("#borrarListaDePacientes");
@@ -132,7 +137,49 @@ btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
 
 
 
+function buscarPorBarra() {
+  arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
+  console.log(document.querySelector("#search").value);
+  palabraAbuscar = document.querySelector("#search").value;
+  arrayPersonasRegistradasAbuscar = [];
+  arrayPersonasRegistradasAbuscar = arrayPersonasRegistradas.filter((persona) =>
+  persona.dni.toString().includes(palabraAbuscar) || persona.nombre.includes(palabraAbuscar)||
+  persona.apellido.includes(palabraAbuscar) || persona.estatura.toString().includes(palabraAbuscar) ||
+  persona.peso.toString().includes(palabraAbuscar));
+  console.log(arrayPersonasRegistradasAbuscar)
 
+  const listaTr = document.querySelectorAll("tr");
+     listaTr.forEach((elemento,i) =>{
+     if (i!= 0) {
+       elemento.remove();
+     }
+    }) 
+  
+  const tbody = document.querySelector("tbody");
+  arrayPersonasRegistradasAbuscar.forEach((persona, i) => {
+    if (persona.imc <25) {
+      color  = 'green';
+ } else  if (persona.imc > 25 && persona.imc < 30) {
+      color = 'yellow';
+ } else {
+    color  = 'red';
+ }  
+    
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = ` 
+  <th scope="col">${i + 1}</th>
+  <td>${persona.dni}</td>
+  <td>${persona.nombre}</td>
+  <td>${persona.apellido}</td>
+  <td>${persona.estatura}</td>
+  <td>${persona.peso}</td>
+  <td style="color:${color}">${persona.imc}</td>
+  `;
+    tbody.append(tr);
+  });
+
+}
 
 
 
@@ -298,25 +345,54 @@ function mostrar() {
       `Estás son las personas registradas hoy en día ${JSON.stringify(
         personasRegistradasDia
       )}`
-    );
+    );  
     console.table(personasRegistradasDia);
   }
 }
 
-function buscarPaciente() {
-  personaABuscar = capitalizarPrimeraLetra(
-    prompt("Ingrese el nombre de la persona a buscar")
-  );
-  const personaBuscadaPorNombre = arrayPersonasRegistradas.find((persona) =>
-    persona.nombre.includes(personaABuscar)
-  );
-  if (personaBuscadaPorNombre !== undefined) {
-    console.log("La persona buscada es:  %o", personaBuscadaPorNombre);
-  } else {
-    alert("No hay coincidencia con la búsqueda");
-  }
-  inicioPrograma();
-}
+// function buscarPaciente(e) {
+//   e.target.removeEventListener(e.type, buscarImcMaximo);
+//   arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
+//   if (arrayPersonasRegistradas) {
+//     const form = document.createElement("form");
+//     form.className = "form-inline";
+//     form.method = "POST"
+//     const div = document.createElement("div");
+//     div.className = "input-group";
+//     div.innerHTML = `
+//     <input type="text" class="form-control" id="dniAbuscar" placeholder="Ingrese su numero de DNI"  name="dniAbuscar">
+//     `
+//     form.append(div); 
+//     document.body.appendChild(form);
+
+//     const dniAbuscar = document.querySelector("#dniAbuscar")
+
+//     const personaBuscadaPorDni = arrayPersonasRegistradas.find((persona) =>
+//      persona.dni.includes(dniAbuscar))
+     
+//      if (personaBuscadaPorDni) {
+//      console.log("La persona buscada es:  %o", personaBuscadaPorDni);
+// }
+
+//   }
+
+
+
+
+
+//   // personaABuscar = capitalizarPrimeraLetra(
+//   //   prompt("Ingrese el nombre de la persona a buscar")
+//   // );
+//   // const personaBuscadaPorNombre = arrayPersonasRegistradas.find((persona) =>
+//   //   persona.nombre.includes(personaABuscar)
+//   // );
+//   // if (personaBuscadaPorNombre !== undefined) {
+//   //   console.log("La persona buscada es:  %o", personaBuscadaPorNombre);
+//   // } else {
+//   //   alert("No hay coincidencia con la búsqueda");
+//   // }
+//   // inicioPrograma();
+// }
 
 function buscarImcMenores() {
   imcTope = Number(prompt("Ingrese el imc de tope"));
@@ -351,47 +427,119 @@ function buscarImcMaximo(e) {
     const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
     imcMaximo = Math.max(...arrayImc);
     console.log(arrayImc)
-    const personaImcMaximo = arrayPersonasRegistradas.find(persona => persona.imc == imcMaximo);
+     personaImcMaximo = arrayPersonasRegistradas.find(persona => persona.imc == imcMaximo);
     console.log(personaImcMaximo)
-    const table = document.createElement("table");
-    table.className = "table"
+
+
+    const listaTr = document.querySelectorAll("tr");
+     listaTr.forEach((elemento,i) =>{
+     if (i!= 0) {
+       elemento.remove();
+     }
+    })
+    console.log(personaImcMaximo)
+
     
-    if (imcMaximo <25) {
+  
+   tbody = document.querySelector("tbody");
+
+    if (personaImcMaximo.imc < 25) {
       color  = 'green';
- } else  if (imcMaximo > 25 && imcMaximo < 30) {
-      color = 'yellow';
- } else {
-    color  = 'red';
- }  
+    } else if (personaImcMaximo.imc > 25 && personaImcMaximo.imc < 30)
+    color = 'yellow';
+   } else {
+    color = 'red';
+   }
 
-    table.innerHTML =`
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">DNI</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Apellido</th>
-          <th scope="col">Estatura(Metros)</th>
-          <th scope="col">Peso(KG)</th>
-          <th scope="col">IMC</th>
-        </tr>
-      </thead>
-       <tbody>
-       <td scope="col">ID</td>
-       <td scope="col">${personaImcMaximo.dni}</td>
-       <td scope="col">${personaImcMaximo.nombre}</td>
-       <td scope="col">${personaImcMaximo.apellido}</td>
-       <td scope="col">${personaImcMaximo.estatura}</td>
-       <td scope="col">${personaImcMaximo.peso}</td>
-       <td  style="color:${color}" scope="col">${personaImcMaximo.imc}</td>
-      </tbody>
-         `;
+   console.log(personaImcMaximo)
 
-    document.body.appendChild(table);
-  } else {
-    alert("Ingrese pacientes para utilizar la función");
-  }
-}
+
+    tr = document.createElement("tr");
+
+    tr.innerHTML = ` 
+  <th scope="col">${1}</th>
+  <td>${personaImcMaximo.dni}</td>
+  <td>${personaImcMaximo.nombre}</td>
+  <td>${personaImcMaximo.apellido}</td>
+  <td>${personaImcMaximo.estatura}</td>
+  <td>${personaImcMaximo.peso}</td>
+  <td style="color:${color}">${personaImcMaximo.imc}</td>
+  `;
+    tbody.append(tr);
+  };
+
+
+
+
+
+//   arrayPersonasRegistradasAbuscar.forEach((persona, i) => {
+//     if (persona.imc <25) {
+//       color  = 'green';
+//  } else  if (persona.imc > 25 && persona.imc < 30) {
+//       color = 'yellow';
+//  } else {
+//     color  = 'red';
+//  } 
+ 
+ 
+
+    
+//     const tr = document.createElement("tr");
+
+//     tr.innerHTML = ` 
+//   <th scope="col">${i + 1}</th>
+//   <td>${persona.dni}</td>
+//   <td>${persona.nombre}</td>
+//   <td>${persona.apellido}</td>
+//   <td>${persona.estatura}</td>
+//   <td>${persona.peso}</td>
+//   <td style="color:${color}">${persona.imc}</td>
+//   `;
+//     tbody.append(tr);
+//   });
+
+
+
+
+//     const table = document.createElement("table");
+//     table.className = "table"
+    
+//     if (imcMaximo <25) {
+//       color  = 'green';
+//  } else  if (imcMaximo > 25 && imcMaximo < 30) {
+//       color = 'yellow';
+//  } else {
+//     color  = 'red';
+//  }  
+
+//     table.innerHTML =`
+//       <thead>
+//         <tr>
+//           <th scope="col">ID</th>
+//           <th scope="col">DNI</th>
+//           <th scope="col">Nombre</th>
+//           <th scope="col">Apellido</th>
+//           <th scope="col">Estatura(Metros)</th>
+//           <th scope="col">Peso(KG)</th>
+//           <th scope="col">IMC</th>
+//         </tr>
+//       </thead>
+//        <tbody>
+//        <td scope="col">ID</td>
+//        <td scope="col">${personaImcMaximo.dni}</td>
+//        <td scope="col">${personaImcMaximo.nombre}</td>
+//        <td scope="col">${personaImcMaximo.apellido}</td>
+//        <td scope="col">${personaImcMaximo.estatura}</td>
+//        <td scope="col">${personaImcMaximo.peso}</td>
+//        <td  style="color:${color}" scope="col">${personaImcMaximo.imc}</td>
+//       </tbody>
+//          `;
+
+//     document.body.appendChild(table);
+//   } else {
+//     alert("Ingrese pacientes para utilizar la función");
+//   }
+
 
 function buscarImcMinimo(e) {
   e.target.removeEventListener(e.type, buscarImcMinimo);
@@ -399,46 +547,48 @@ function buscarImcMinimo(e) {
   if (arrayPersonasRegistradas) {
     const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
     imcMinimo = Math.min(...arrayImc);
-    const personaImcMinimo = arrayPersonasRegistradas.find(persona => persona.imc == imcMinimo);
-    const table = document.createElement("table");
-    table.className = "table"
+    console.log(arrayImc)
+     personaImcMinimo = arrayPersonasRegistradas.find(persona => persona.imc == imcMinimo);
+    console.log(personaImcMinimo)
+
+
+    const listaTr = document.querySelectorAll("tr");
+     listaTr.forEach((elemento,i) =>{
+     if (i!= 0) {
+       elemento.remove();
+     }
+    })
+    console.log(personaImcMinimo)
+
     
-    if (imcMinimo <25) {
+  
+   tbody = document.querySelector("tbody");
+
+    if (personaImcMinimo.imc < 25) {
       color  = 'green';
- } else  if (imcMinimo > 25 && imcMinimo < 30) {
-      color = 'yellow';
- } else {
-    color  = 'red';
- }  
+    } else if (personaImcMinimo.imc > 25 && personaImcMinimo.imc < 30)
+    color = 'yellow';
+   } else {
+    color = 'red';
+   }
 
-    table.innerHTML =`
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">DNI</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Apellido</th>
-          <th scope="col">Estatura(Metros)</th>
-          <th scope="col">Peso(KG)</th>
-          <th scope="col">IMC</th>
-        </tr>
-      </thead>
-       <tbody>
-       <td scope="col">ID</td>
-       <td scope="col">${personaImcMinimo.dni}</td>
-       <td scope="col">${personaImcMinimo.nombre}</td>
-       <td scope="col">${personaImcMinimo.apellido}</td>
-       <td scope="col">${personaImcMinimo.estatura}</td>
-       <td scope="col">${personaImcMinimo.peso}</td>
-       <td  style="color:${color}" scope="col">${personaImcMinimo.imc}</td>
-      </tbody>
-         `;
+   console.log(personaImcMinimo)
 
-    document.body.appendChild(table);
-  } else {
-    alert("Ingrese pacientes para utilizar la función");
-  }
-}
+
+    tr = document.createElement("tr");
+
+    tr.innerHTML = ` 
+  <th scope="col">${1}</th>
+  <td>${personaImcMinimo.dni}</td>
+  <td>${personaImcMinimo.nombre}</td>
+  <td>${personaImcMinimo.apellido}</td>
+  <td>${personaImcMinimo.estatura}</td>
+  <td>${personaImcMinimo.peso}</td>
+  <td style="color:${color}">${personaImcMinimo.imc}</td>
+  `;
+    tbody.append(tr);
+  } 
+
 
 function inicioPrograma() {
   accionUsuario = Number(
@@ -469,37 +619,37 @@ function inicioPrograma() {
   }
 }
 
-function filtroDeBusqueda() {
-  accionUsuario = Number(
-    prompt(`Elija una acción:
-  1: Buscar un paciente por nombre.
-  2: Buscar IMC mayores a un tope.
-  3: Buscar IMC menores a un tope.
-  4: Buscar IMC máximo.
-  5: Buscar IMC mínimo.
-  `)
-  );
+// function filtroDeBusqueda() {
+//   accionUsuario = Number(
+//     prompt(`Elija una acción:
+//   1: Buscar un paciente por nombre.
+//   2: Buscar IMC mayores a un tope.
+//   3: Buscar IMC menores a un tope.
+//   4: Buscar IMC máximo.
+//   5: Buscar IMC mínimo.
+//   `)
+//   );
 
-  switch (accionUsuario) {
-    case 1:
-      buscarPaciente();
-      break;
-    case 2:
-      buscarImcMayores();
-      break;
-    case 3:
-      buscarImcMenores();
-      break;
-    case 4:
-      buscarImcMaximo();
-      break;
-    case 5:
-      buscarImcMinimo();
-      break;
-    default:
-      break;
-  }
-}
+//   switch (accionUsuario) {
+//     case 1:
+//       buscarPaciente();
+//       break;
+//     case 2:
+//       buscarImcMayores();
+//       break;
+//     case 3:
+//       buscarImcMenores();
+//       break;
+//     case 4:
+//       buscarImcMaximo();
+//       break;
+//     case 5:
+//       buscarImcMinimo();
+//       break;
+//     default:
+//       break;
+//   }
+// }
 
 
 implementarDom();
