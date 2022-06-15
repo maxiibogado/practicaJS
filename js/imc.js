@@ -75,6 +75,53 @@ function implementarDom() {
   } else {
     arrayPersonasRegistradas = [];
   }
+  
+  
+  
+  
+  
+  const tbody = document.querySelector("tbody");
+  arrayPersonasRegistradas.forEach((persona, i) => {
+    if (persona.imc <25) {
+      color  = 'green';
+ } else  if (persona.imc > 25 && persona.imc < 30) {
+      color = 'yellow';
+ } else {
+    color  = 'red';
+ }  
+    
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = ` 
+  <th scope="col">${i + 1}</th>
+  <td>${persona.dni}</td>
+  <td>${persona.nombre}</td>
+  <td>${persona.apellido}</td>
+  <td>${persona.estatura}</td>
+  <td>${persona.peso}</td>
+  <td style="color:${color}">${persona.imc}</td>
+  `;
+    tbody.append(tr);
+  });
+}
+
+function mostrarListado() {
+  if (localStorage.getItem("personasRegistradas")) {
+    arrayPersonasRegistradas = JSON.parse(
+      localStorage.getItem("personasRegistradas")
+    );
+  } else {
+    arrayPersonasRegistradas = [];
+  }
+  
+
+  const listaTr = document.querySelectorAll("tr");
+     listaTr.forEach((elemento,i) =>{
+     if (i!= 0) {
+       elemento.remove();
+     }
+    }) 
+  
   const tbody = document.querySelector("tbody");
   arrayPersonasRegistradas.forEach((persona, i) => {
     if (persona.imc <25) {
@@ -125,8 +172,8 @@ const btnBuscarImcMaximo = document.querySelector("#imcMaximo");
 btnBuscarImcMaximo.addEventListener("click", buscarImcMaximo);
 const btnBuscarImcMinimo = document.querySelector("#imcMinimo");
 btnBuscarImcMinimo.addEventListener("click", buscarImcMinimo);
-// const btnBuscarPorDni = document.querySelector("#dniPaciente");
-// btnBuscarPorDni.addEventListener("click", buscarPaciente);
+const btnMostrarListado = document.querySelector("#listado");
+btnMostrarListado.addEventListener("click", mostrarListado);
 
 const searchBar = document.querySelector("#search"); 
 searchBar.addEventListener("input", buscarPorBarra )
@@ -139,8 +186,9 @@ btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
 
 function buscarPorBarra() {
   arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
-  console.log(document.querySelector("#search").value);
-  palabraAbuscar = document.querySelector("#search").value;
+  
+  palabraAbuscar = capitalizarPrimeraLetra(document.querySelector("#search").value);
+  console.log(palabraAbuscar);
   arrayPersonasRegistradasAbuscar = [];
   arrayPersonasRegistradasAbuscar = arrayPersonasRegistradas.filter((persona) =>
   persona.dni.toString().includes(palabraAbuscar) || persona.nombre.includes(palabraAbuscar)||
@@ -420,8 +468,7 @@ function buscarImcMayores() {
   inicioPrograma();
 }
 
-function buscarImcMaximo(e) {
-  e.target.removeEventListener(e.type, buscarImcMaximo);
+function buscarImcMaximo() {
   arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
   if (arrayPersonasRegistradas) {
     const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
@@ -437,7 +484,7 @@ function buscarImcMaximo(e) {
        elemento.remove();
      }
     })
-    console.log(personaImcMaximo)
+    console.log(personaImcMaximo.imc)
 
     
   
@@ -445,11 +492,13 @@ function buscarImcMaximo(e) {
 
     if (personaImcMaximo.imc < 25) {
       color  = 'green';
-    } else if (personaImcMaximo.imc > 25 && personaImcMaximo.imc < 30)
+    } else if (personaImcMaximo.imc > 25 && personaImcMaximo.imc < 30){
     color = 'yellow';
    } else {
     color = 'red';
    }
+
+   console.log(color)
 
    console.log(personaImcMaximo)
 
@@ -468,81 +517,13 @@ function buscarImcMaximo(e) {
     tbody.append(tr);
   };
 
+}
 
 
 
 
-//   arrayPersonasRegistradasAbuscar.forEach((persona, i) => {
-//     if (persona.imc <25) {
-//       color  = 'green';
-//  } else  if (persona.imc > 25 && persona.imc < 30) {
-//       color = 'yellow';
-//  } else {
-//     color  = 'red';
-//  } 
- 
- 
 
-    
-//     const tr = document.createElement("tr");
-
-//     tr.innerHTML = ` 
-//   <th scope="col">${i + 1}</th>
-//   <td>${persona.dni}</td>
-//   <td>${persona.nombre}</td>
-//   <td>${persona.apellido}</td>
-//   <td>${persona.estatura}</td>
-//   <td>${persona.peso}</td>
-//   <td style="color:${color}">${persona.imc}</td>
-//   `;
-//     tbody.append(tr);
-//   });
-
-
-
-
-//     const table = document.createElement("table");
-//     table.className = "table"
-    
-//     if (imcMaximo <25) {
-//       color  = 'green';
-//  } else  if (imcMaximo > 25 && imcMaximo < 30) {
-//       color = 'yellow';
-//  } else {
-//     color  = 'red';
-//  }  
-
-//     table.innerHTML =`
-//       <thead>
-//         <tr>
-//           <th scope="col">ID</th>
-//           <th scope="col">DNI</th>
-//           <th scope="col">Nombre</th>
-//           <th scope="col">Apellido</th>
-//           <th scope="col">Estatura(Metros)</th>
-//           <th scope="col">Peso(KG)</th>
-//           <th scope="col">IMC</th>
-//         </tr>
-//       </thead>
-//        <tbody>
-//        <td scope="col">ID</td>
-//        <td scope="col">${personaImcMaximo.dni}</td>
-//        <td scope="col">${personaImcMaximo.nombre}</td>
-//        <td scope="col">${personaImcMaximo.apellido}</td>
-//        <td scope="col">${personaImcMaximo.estatura}</td>
-//        <td scope="col">${personaImcMaximo.peso}</td>
-//        <td  style="color:${color}" scope="col">${personaImcMaximo.imc}</td>
-//       </tbody>
-//          `;
-
-//     document.body.appendChild(table);
-//   } else {
-//     alert("Ingrese pacientes para utilizar la función");
-//   }
-
-
-function buscarImcMinimo(e) {
-  e.target.removeEventListener(e.type, buscarImcMinimo);
+function buscarImcMinimo() {
   arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
   if (arrayPersonasRegistradas) {
     const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
@@ -566,7 +547,7 @@ function buscarImcMinimo(e) {
 
     if (personaImcMinimo.imc < 25) {
       color  = 'green';
-    } else if (personaImcMinimo.imc > 25 && personaImcMinimo.imc < 30)
+    } else if (personaImcMinimo.imc > 25 && personaImcMinimo.imc < 30){
     color = 'yellow';
    } else {
     color = 'red';
@@ -589,67 +570,8 @@ function buscarImcMinimo(e) {
     tbody.append(tr);
   } 
 
-
-function inicioPrograma() {
-  accionUsuario = Number(
-    prompt(`Elija una acción:
-  1: Filtros de búsqueda.
-  2: Agregar un paciente nuevo.
-  3: Mostrar listado de pacientes
-  4: Salir del programa`)
-  );
-
-  switch (accionUsuario) {
-    case 1:
-      filtroDeBusqueda();
-      break;
-    case 2:
-      mostrar();
-      break;
-    case 3:
-      implementarDom();
-      break;
-    case 4:
-      alert("Gracias por utilizar NutriMax.");
-      break;
-    default:
-      alert("Ingresó el dato incorrecto");
-      inicioPrograma();
-      break;
-  }
 }
 
-// function filtroDeBusqueda() {
-//   accionUsuario = Number(
-//     prompt(`Elija una acción:
-//   1: Buscar un paciente por nombre.
-//   2: Buscar IMC mayores a un tope.
-//   3: Buscar IMC menores a un tope.
-//   4: Buscar IMC máximo.
-//   5: Buscar IMC mínimo.
-//   `)
-//   );
-
-//   switch (accionUsuario) {
-//     case 1:
-//       buscarPaciente();
-//       break;
-//     case 2:
-//       buscarImcMayores();
-//       break;
-//     case 3:
-//       buscarImcMenores();
-//       break;
-//     case 4:
-//       buscarImcMaximo();
-//       break;
-//     case 5:
-//       buscarImcMinimo();
-//       break;
-//     default:
-//       break;
-//   }
-// }
 
 
 implementarDom();
