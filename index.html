@@ -31,7 +31,7 @@
       </nav>
       <h1 style="text-align: center;">Ingrese los datos del paciente</h1>
       <br>
-      <form class="form-inline" action="/action_page.php">
+      <form class="form-inline" action="">
         
       <div class="input-group">
         <input type="text" class="form-control" id="dni" placeholder="Ingrese su numero de DNI"  name="dni">
@@ -60,8 +60,11 @@
 
 
     <h1 id="tituloPrincipal">Listado de pacientes</h1>
-  <form class="form-inline" action="/action_page.php"> 
-      <div class="input-group" style="justify-content:right;">
+   
+  
+    <form class="form-inline" action="/action_page.php"> 
+     
+    <div class="input-group" style="justify-content:right;">
     <button id ="buscar" type="button" class="btn btn-primary"> Buscar</button>
          <input type="search" name="search" id="search">
       </div>
@@ -83,12 +86,11 @@
        <tbody>
       </tbody>
     </table>
-    
+     <button id ="listado" type="button" class="btn btn-success"> Mostrar listado de pacientes</button>
      <button id ="borrarPaciente" type="button" class="btn btn-warning"> Eliminar último paciente</button>
      <button id ="borrarListaDePacientes" type="button" class="btn btn-danger"> Eliminar lista de pacientes</button>
      <button id ="imcMaximo" type="button" class="btn btn-info"> Buscar paciente con IMC más alto</button>
-     <button id ="imcMinimo" type="button" class="btn btn-info"> Buscar paciente con IMC más bajo</button>
-     <button id ="listado" type="button" class="btn btn-success"> Mostrar listado de pacientes</button>
+     <button id ="imcMinimo" type="button" class="btn btn-secondary"> Buscar paciente con IMC más bajo</button>
 
 
   

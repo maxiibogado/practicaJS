@@ -55,7 +55,7 @@ const borrarListadoPacientes = () => {
 }
 
 const capitalizarPrimeraLetra = (palabra) => {
-  while (palabra == null || palabra.trim() == "") {
+  while (palabra == null ) {
     palabra = prompt(`Ingrese su dato correctamente`);
   }
   let palabraSplit = palabra.toLowerCase().split(" ");
@@ -193,7 +193,7 @@ function buscarPorBarra() {
   arrayPersonasRegistradasAbuscar = arrayPersonasRegistradas.filter((persona) =>
   persona.dni.toString().includes(palabraAbuscar) || persona.nombre.includes(palabraAbuscar)||
   persona.apellido.includes(palabraAbuscar) || persona.estatura.toString().includes(palabraAbuscar) ||
-  persona.peso.toString().includes(palabraAbuscar));
+  persona.peso.toString().includes(palabraAbuscar) || persona.imc.toString().includes(palabraAbuscar));
   console.log(arrayPersonasRegistradasAbuscar)
 
   const listaTr = document.querySelectorAll("tr");
@@ -233,16 +233,7 @@ function buscarPorBarra() {
 
 
 
-function definirEstilo(persona) {
-  if (persona.imc < 25) {
-    return   `<td  style="color:green">${persona.imc}</td>`
-  } else  if (persona.imc > 25 && persona.imc < 30) {
-    return   `<td  style="color:yellow">${persona.imc}</td>`
-  }
-  else {
-    return   `<td style="color:yellow">${persona.imc}</td>`
-  }
-}
+
 
 
 
@@ -398,49 +389,13 @@ function mostrar() {
   }
 }
 
-// function buscarPaciente(e) {
-//   e.target.removeEventListener(e.type, buscarImcMaximo);
-//   arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
-//   if (arrayPersonasRegistradas) {
-//     const form = document.createElement("form");
-//     form.className = "form-inline";
-//     form.method = "POST"
-//     const div = document.createElement("div");
-//     div.className = "input-group";
-//     div.innerHTML = `
-//     <input type="text" class="form-control" id="dniAbuscar" placeholder="Ingrese su numero de DNI"  name="dniAbuscar">
-//     `
-//     form.append(div); 
-//     document.body.appendChild(form);
-
-//     const dniAbuscar = document.querySelector("#dniAbuscar")
-
-//     const personaBuscadaPorDni = arrayPersonasRegistradas.find((persona) =>
-//      persona.dni.includes(dniAbuscar))
-     
-//      if (personaBuscadaPorDni) {
-//      console.log("La persona buscada es:  %o", personaBuscadaPorDni);
-// }
-
-//   }
 
 
 
 
 
-//   // personaABuscar = capitalizarPrimeraLetra(
-//   //   prompt("Ingrese el nombre de la persona a buscar")
-//   // );
-//   // const personaBuscadaPorNombre = arrayPersonasRegistradas.find((persona) =>
-//   //   persona.nombre.includes(personaABuscar)
-//   // );
-//   // if (personaBuscadaPorNombre !== undefined) {
-//   //   console.log("La persona buscada es:  %o", personaBuscadaPorNombre);
-//   // } else {
-//   //   alert("No hay coincidencia con la búsqueda");
-//   // }
-//   // inicioPrograma();
-// }
+
+
 
 function buscarImcMenores() {
   imcTope = Number(prompt("Ingrese el imc de tope"));
