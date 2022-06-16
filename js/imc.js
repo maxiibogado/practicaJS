@@ -41,21 +41,21 @@ const persona3 = new Persona(
 const persona4 = new Persona(14209164, "Marciano", "Bogado", 1.75, 80, 27.43);
 
 const borrarListadoPacientes = () => {
-  if (localStorage.getItem('personasRegistradas')) {
-    localStorage.removeItem('personasRegistradas')
-  } 
-    arrayPersonasRegistradas = [];
+  if (localStorage.getItem("personasRegistradas")) {
+    localStorage.removeItem("personasRegistradas");
+  }
+  arrayPersonasRegistradas = [];
 
   const listaTr = document.querySelectorAll("tr");
-     listaTr.forEach((elemento,i) =>{
-     if (i!= 0) {
-       elemento.remove();
-     }
-    }) 
-}
+  listaTr.forEach((elemento, i) => {
+    if (i != 0) {
+      elemento.remove();
+    }
+  });
+};
 
 const capitalizarPrimeraLetra = (palabra) => {
-  while (palabra == null ) {
+  while (palabra == null) {
     palabra = prompt(`Ingrese su dato correctamente`);
   }
   let palabraSplit = palabra.toLowerCase().split(" ");
@@ -66,7 +66,6 @@ const capitalizarPrimeraLetra = (palabra) => {
   return palabraSplit.join(" ");
 };
 
-
 function implementarDom() {
   if (localStorage.getItem("personasRegistradas")) {
     arrayPersonasRegistradas = JSON.parse(
@@ -75,21 +74,17 @@ function implementarDom() {
   } else {
     arrayPersonasRegistradas = [];
   }
-  
-  
-  
-  
-  
+
   const tbody = document.querySelector("tbody");
   arrayPersonasRegistradas.forEach((persona, i) => {
-    if (persona.imc <25) {
-      color  = 'green';
- } else  if (persona.imc > 25 && persona.imc < 30) {
-      color = 'yellow';
- } else {
-    color  = 'red';
- }  
-    
+    if (persona.imc < 25) {
+      color = "green";
+    } else if (persona.imc > 25 && persona.imc < 30) {
+      color = "yellow";
+    } else {
+      color = "red";
+    }
+
     const tr = document.createElement("tr");
 
     tr.innerHTML = ` 
@@ -113,25 +108,24 @@ function mostrarListado() {
   } else {
     arrayPersonasRegistradas = [];
   }
-  
 
   const listaTr = document.querySelectorAll("tr");
-     listaTr.forEach((elemento,i) =>{
-     if (i!= 0) {
-       elemento.remove();
-     }
-    }) 
-  
+  listaTr.forEach((elemento, i) => {
+    if (i != 0) {
+      elemento.remove();
+    }
+  });
+
   const tbody = document.querySelector("tbody");
   arrayPersonasRegistradas.forEach((persona, i) => {
-    if (persona.imc <25) {
-      color  = 'green';
- } else  if (persona.imc > 25 && persona.imc < 30) {
-      color = 'yellow';
- } else {
-    color  = 'red';
- }  
-    
+    if (persona.imc < 25) {
+      color = "green";
+    } else if (persona.imc > 25 && persona.imc < 30) {
+      color = "yellow";
+    } else {
+      color = "red";
+    }
+
     const tr = document.createElement("tr");
 
     tr.innerHTML = ` 
@@ -148,23 +142,20 @@ function mostrarListado() {
 }
 
 const limpiarFormulario = () => {
-  console.log(document.querySelector("#dni").value)
+  console.log(document.querySelector("#dni").value);
   document.querySelector("#dni").value = "";
   document.querySelector("#nombre").value = "";
   document.querySelector("#apellido").value = "";
   document.querySelector("#estatura").value = "";
-  document.querySelector("#peso").value = "";   
-}
-
-
-
+  document.querySelector("#peso").value = "";
+};
 
 const btnAgregarPaciente = document.querySelector("#addPaciente");
 btnAgregarPaciente.addEventListener("click", agregarPaciente);
-const btnLimpiarFormulario = document.querySelector('#limpiarForm');
+const btnLimpiarFormulario = document.querySelector("#limpiarForm");
 if (btnLimpiarFormulario) {
-  console.log(limpiarFormulario)
-  btnLimpiarFormulario.addEventListener("click",limpiarFormulario);
+  console.log(limpiarFormulario);
+  btnLimpiarFormulario.addEventListener("click", limpiarFormulario);
 }
 const btnBorrarPaciente = document.querySelector("#borrarPaciente");
 btnBorrarPaciente.addEventListener("click", borrarUltimoPaciente);
@@ -175,44 +166,52 @@ btnBuscarImcMinimo.addEventListener("click", buscarImcMinimo);
 const btnMostrarListado = document.querySelector("#listado");
 btnMostrarListado.addEventListener("click", mostrarListado);
 
-const searchBar = document.querySelector("#search"); 
-searchBar.addEventListener("input", buscarPorBarra )
+const searchBar = document.querySelector("#search");
+searchBar.addEventListener("input", buscarPorBarra);
 
-
-const btnBorrarListadoDePaciente = document.querySelector("#borrarListaDePacientes");
+const btnBorrarListadoDePaciente = document.querySelector(
+  "#borrarListaDePacientes"
+);
 btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
 
-
-
 function buscarPorBarra() {
-  arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
-  
-  palabraAbuscar = capitalizarPrimeraLetra(document.querySelector("#search").value);
+  arrayPersonasRegistradas = JSON.parse(
+    localStorage.getItem("personasRegistradas")
+  );
+
+  palabraAbuscar = capitalizarPrimeraLetra(
+    document.querySelector("#search").value
+  );
   console.log(palabraAbuscar);
   arrayPersonasRegistradasAbuscar = [];
-  arrayPersonasRegistradasAbuscar = arrayPersonasRegistradas.filter((persona) =>
-  persona.dni.toString().includes(palabraAbuscar) || persona.nombre.includes(palabraAbuscar)||
-  persona.apellido.includes(palabraAbuscar) || persona.estatura.toString().includes(palabraAbuscar) ||
-  persona.peso.toString().includes(palabraAbuscar) || persona.imc.toString().includes(palabraAbuscar));
-  console.log(arrayPersonasRegistradasAbuscar)
+  arrayPersonasRegistradasAbuscar = arrayPersonasRegistradas.filter(
+    (persona) =>
+      persona.dni.toString().includes(palabraAbuscar) ||
+      persona.nombre.includes(palabraAbuscar) ||
+      persona.apellido.includes(palabraAbuscar) ||
+      persona.estatura.toString().includes(palabraAbuscar) ||
+      persona.peso.toString().includes(palabraAbuscar) ||
+      persona.imc.toString().includes(palabraAbuscar)
+  );
+  console.log(arrayPersonasRegistradasAbuscar);
 
   const listaTr = document.querySelectorAll("tr");
-     listaTr.forEach((elemento,i) =>{
-     if (i!= 0) {
-       elemento.remove();
-     }
-    }) 
-  
+  listaTr.forEach((elemento, i) => {
+    if (i != 0) {
+      elemento.remove();
+    }
+  });
+
   const tbody = document.querySelector("tbody");
   arrayPersonasRegistradasAbuscar.forEach((persona, i) => {
-    if (persona.imc <25) {
-      color  = 'green';
- } else  if (persona.imc > 25 && persona.imc < 30) {
-      color = 'yellow';
- } else {
-    color  = 'red';
- }  
-    
+    if (persona.imc < 25) {
+      color = "green";
+    } else if (persona.imc > 25 && persona.imc < 30) {
+      color = "yellow";
+    } else {
+      color = "red";
+    }
+
     const tr = document.createElement("tr");
 
     tr.innerHTML = ` 
@@ -226,37 +225,25 @@ function buscarPorBarra() {
   `;
     tbody.append(tr);
   });
-
 }
 
-
-
-
-
-
-
-
-
 function agregarPaciente() {
-
   dni = verificarDato(Number(document.querySelector("#dni").value));
-  nombre = datoSinEspacio(capitalizarPrimeraLetra(document.querySelector("#nombre").value));
+  nombre = datoSinEspacio(
+    capitalizarPrimeraLetra(document.querySelector("#nombre").value)
+  );
   apellido = datoSinEspacio(
     capitalizarPrimeraLetra(document.querySelector("#apellido").value)
   );
   estatura = verificarDato(Number(document.querySelector("#estatura").value));
   peso = verificarDato(Number(document.querySelector("#peso").value));
-  imc = calcularIMC(peso, estatura)
-
-    
-  
-
+  imc = calcularIMC(peso, estatura);
 
   const paciente = new Persona(dni, nombre, apellido, estatura, peso, imc);
   arrayPersonasRegistradas.push(paciente);
   personaRegistrada.push(paciente);
   console.log(arrayPersonasRegistradas);
-  console.log(personaRegistrada)
+  console.log(personaRegistrada);
   localStorage.setItem(
     "personasRegistradas",
     JSON.stringify(arrayPersonasRegistradas)
@@ -266,20 +253,17 @@ function agregarPaciente() {
     JSON.stringify(personaRegistrada)
   );
 
-
   const tbody = document.querySelector("tbody");
   personaRegistrada.forEach((persona) => {
-    if (imc <25) {
-       color  = 'green';
-  } else  if (imc > 25 && imc < 30) {
-       color = 'yellow';
-  } else {
-     color  = 'red';
-  }  
-
+    if (imc < 25) {
+      color = "green";
+    } else if (imc > 25 && imc < 30) {
+      color = "yellow";
+    } else {
+      color = "red";
+    }
 
     const tr = document.createElement("tr");
-
 
     tr.innerHTML = ` 
   <th scope="col">${arrayPersonasRegistradas.length}</th>
@@ -289,44 +273,31 @@ function agregarPaciente() {
   <td>${persona.estatura}</td>
   <td>${persona.peso}</td>
   <td style="color:${color}">${persona.imc}</td>
-  `;  
+  `;
     tbody.append(tr);
-    
-    
-   
   });
 
   personaRegistrada = [];
-
 }
 
-
-
-
-
-
-
-
-
 function borrarUltimoPaciente() {
-
-  arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
+  arrayPersonasRegistradas = JSON.parse(
+    localStorage.getItem("personasRegistradas")
+  );
   arrayPersonasRegistradas.pop();
-    const listaTr = document.querySelectorAll("tr");
-    console.log(listaTr)
+  const listaTr = document.querySelectorAll("tr");
+  console.log(listaTr);
 
-        listaTr.forEach((elemento,i) =>{
-        if (i == listaTr.length-1 && i != 0) {
-        elemento.remove();
-        }})
+  listaTr.forEach((elemento, i) => {
+    if (i == listaTr.length - 1 && i != 0) {
+      elemento.remove();
+    }
+  });
 
-      
-
-     localStorage.setItem(
-       "personasRegistradas",
-       JSON.stringify(arrayPersonasRegistradas)
-     );
-
+  localStorage.setItem(
+    "personasRegistradas",
+    JSON.stringify(arrayPersonasRegistradas)
+  );
 }
 
 function modificarTitulo() {
@@ -335,7 +306,6 @@ function modificarTitulo() {
   titulo.style.color = "blueviolet";
   titulo.style.textAlign = "center";
 }
-
 
 const definirComposicionCorporal = (imc) => {
   if (imc < 18.5) {
@@ -384,18 +354,10 @@ function mostrar() {
       `Estás son las personas registradas hoy en día ${JSON.stringify(
         personasRegistradasDia
       )}`
-    );  
+    );
     console.table(personasRegistradasDia);
   }
 }
-
-
-
-
-
-
-
-
 
 function buscarImcMenores() {
   imcTope = Number(prompt("Ingrese el imc de tope"));
@@ -424,44 +386,45 @@ function buscarImcMayores() {
 }
 
 function buscarImcMaximo() {
-  arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
+  arrayPersonasRegistradas = JSON.parse(
+    localStorage.getItem("personasRegistradas")
+  );
   if (arrayPersonasRegistradas) {
     const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
     imcMaximo = Math.max(...arrayImc);
-    console.log(arrayImc)
-     personaImcMaximo = arrayPersonasRegistradas.find(persona => persona.imc == imcMaximo);
-    console.log(personaImcMaximo)
-
+    idMax = arrayImc.indexOf(imcMaximo) + 1;
+    console.log(arrayImc);
+    personaImcMaximo = arrayPersonasRegistradas.find(
+      (persona) => persona.imc == imcMaximo
+    );
+    console.log(personaImcMaximo);
 
     const listaTr = document.querySelectorAll("tr");
-     listaTr.forEach((elemento,i) =>{
-     if (i!= 0) {
-       elemento.remove();
-     }
-    })
-    console.log(personaImcMaximo.imc)
+    listaTr.forEach((elemento, i) => {
+      if (i != 0) {
+        elemento.remove();
+      }
+    });
+    console.log(personaImcMaximo.imc);
 
-    
-  
-   tbody = document.querySelector("tbody");
+    tbody = document.querySelector("tbody");
 
     if (personaImcMaximo.imc < 25) {
-      color  = 'green';
-    } else if (personaImcMaximo.imc > 25 && personaImcMaximo.imc < 30){
-    color = 'yellow';
-   } else {
-    color = 'red';
-   }
+      color = "green";
+    } else if (personaImcMaximo.imc > 25 && personaImcMaximo.imc < 30) {
+      color = "yellow";
+    } else {
+      color = "red";
+    }
 
-   console.log(color)
+    console.log(color);
 
-   console.log(personaImcMaximo)
-
+    console.log(personaImcMaximo);
 
     tr = document.createElement("tr");
 
     tr.innerHTML = ` 
-  <th scope="col">${1}</th>
+  <th scope="col">${idMax}</th>
   <td>${personaImcMaximo.dni}</td>
   <td>${personaImcMaximo.nombre}</td>
   <td>${personaImcMaximo.apellido}</td>
@@ -470,51 +433,49 @@ function buscarImcMaximo() {
   <td style="color:${color}">${personaImcMaximo.imc}</td>
   `;
     tbody.append(tr);
-  };
-
+  }
 }
 
-
-
-
-
 function buscarImcMinimo() {
-  arrayPersonasRegistradas  = JSON.parse(localStorage.getItem('personasRegistradas'));
+  arrayPersonasRegistradas = JSON.parse(
+    localStorage.getItem("personasRegistradas")
+  );
   if (arrayPersonasRegistradas) {
     const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
-    imcMinimo = Math.min(...arrayImc);
     console.log(arrayImc)
-     personaImcMinimo = arrayPersonasRegistradas.find(persona => persona.imc == imcMinimo);
-    console.log(personaImcMinimo)
-
+    imcMinimo = Math.min(...arrayImc);
+    id = arrayImc.indexOf(imcMinimo) + 1;
+    console.log(id);
+    console.log(arrayImc);
+    personaImcMinimo = arrayPersonasRegistradas.find(
+      (persona) => persona.imc == imcMinimo
+    );
+    console.log(personaImcMinimo);
 
     const listaTr = document.querySelectorAll("tr");
-     listaTr.forEach((elemento,i) =>{
-     if (i!= 0) {
-       elemento.remove();
-     }
-    })
-    console.log(personaImcMinimo)
+    listaTr.forEach((elemento, i) => {
+      if (i != 0) {
+        elemento.remove();
+      }
+    });
+    console.log(personaImcMinimo);
 
-    
-  
-   tbody = document.querySelector("tbody");
+    tbody = document.querySelector("tbody");
 
     if (personaImcMinimo.imc < 25) {
-      color  = 'green';
-    } else if (personaImcMinimo.imc > 25 && personaImcMinimo.imc < 30){
-    color = 'yellow';
-   } else {
-    color = 'red';
-   }
+      color = "green";
+    } else if (personaImcMinimo.imc > 25 && personaImcMinimo.imc < 30) {
+      color = "yellow";
+    } else {
+      color = "red";
+    }
 
-   console.log(personaImcMinimo)
-
+    console.log(personaImcMinimo);
 
     tr = document.createElement("tr");
 
     tr.innerHTML = ` 
-  <th scope="col">${1}</th>
+  <th scope="col">${id}</th>
   <td>${personaImcMinimo.dni}</td>
   <td>${personaImcMinimo.nombre}</td>
   <td>${personaImcMinimo.apellido}</td>
@@ -523,11 +484,8 @@ function buscarImcMinimo() {
   <td style="color:${color}">${personaImcMinimo.imc}</td>
   `;
     tbody.append(tr);
-  } 
-
+  }
 }
-
-
 
 implementarDom();
 
