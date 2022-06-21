@@ -1,49 +1,12 @@
-//* Calculo del IMC
-
 personasRegistradasDia = [];
+
 personaRegistrada = [];
 
-class Persona {
-  constructor(dni, nombre, apellido, estatura, peso, imc) {
-    this.dni = dni;
-    this.nombre = nombre;
-    this.apellido = apellido;
-    this.estatura = estatura;
-    this.peso = peso;
-    this.imc = imc;
-  }
-}
 
-const persona1 = new Persona(
-  37843550,
-  "Maximiliano Ariel",
-  "Bogado",
-  1.78,
-  90,
-  28.41
-);
-const persona2 = new Persona(
-  92899424,
-  "Patricia Ramona",
-  "Morinigo",
-  1.65,
-  68,
-  24.98
-);
-const persona3 = new Persona(
-  40850321,
-  "Maria Carolina",
-  "Ingolotti",
-  1.7,
-  65,
-  22.49
-);
-const persona4 = new Persona(14209164, "Marciano", "Bogado", 1.75, 80, 27.43);
 
 const borrarListadoPacientes = () => {
-  if (localStorage.getItem("personasRegistradas")) {
-    localStorage.removeItem("personasRegistradas");
-  }
+ 
+  localStorage.getItem("personasRegistradas") && localStorage.removeItem("personasRegistradas");
   arrayPersonasRegistradas = [];
 
   const listaTr = document.querySelectorAll("tr");
@@ -67,13 +30,15 @@ const capitalizarPrimeraLetra = (palabra) => {
 };
 
 function implementarDom() {
-  if (localStorage.getItem("personasRegistradas")) {
-    arrayPersonasRegistradas = JSON.parse(
-      localStorage.getItem("personasRegistradas")
-    );
-  } else {
-    arrayPersonasRegistradas = [];
-  }
+  // if (localStorage.getItem("personasRegistradas")) {
+  //   arrayPersonasRegistradas = JSON.parse(
+  //     localStorage.getItem("personasRegistradas")
+  //   );
+  // } else {
+  //   arrayPersonasRegistradas = [];
+  // }
+
+   arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
 
   const tbody = document.querySelector("tbody");
   arrayPersonasRegistradas.forEach((persona, i) => {
@@ -101,13 +66,15 @@ function implementarDom() {
 }
 
 function mostrarListado() {
-  if (localStorage.getItem("personasRegistradas")) {
-    arrayPersonasRegistradas = JSON.parse(
-      localStorage.getItem("personasRegistradas")
-    );
-  } else {
-    arrayPersonasRegistradas = [];
-  }
+  // if (localStorage.getItem("personasRegistradas")) {
+  //   arrayPersonasRegistradas = JSON.parse(
+  //     localStorage.getItem("personasRegistradas")
+  //   );
+  // } else {
+  //   arrayPersonasRegistradas = [];
+  // }
+
+  arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
 
   const listaTr = document.querySelectorAll("tr");
   listaTr.forEach((elemento, i) => {
@@ -142,7 +109,6 @@ function mostrarListado() {
 }
 
 const limpiarFormulario = () => {
-  console.log(document.querySelector("#dni").value);
   document.querySelector("#dni").value = "";
   document.querySelector("#nombre").value = "";
   document.querySelector("#apellido").value = "";
@@ -154,7 +120,6 @@ const btnAgregarPaciente = document.querySelector("#addPaciente");
 btnAgregarPaciente.addEventListener("click", agregarPaciente);
 const btnLimpiarFormulario = document.querySelector("#limpiarForm");
 if (btnLimpiarFormulario) {
-  console.log(limpiarFormulario);
   btnLimpiarFormulario.addEventListener("click", limpiarFormulario);
 }
 const btnBorrarPaciente = document.querySelector("#borrarPaciente");
@@ -242,8 +207,6 @@ function agregarPaciente() {
   const paciente = new Persona(dni, nombre, apellido, estatura, peso, imc);
   arrayPersonasRegistradas.push(paciente);
   personaRegistrada.push(paciente);
-  console.log(arrayPersonasRegistradas);
-  console.log(personaRegistrada);
   localStorage.setItem(
     "personasRegistradas",
     JSON.stringify(arrayPersonasRegistradas)
@@ -302,7 +265,6 @@ function borrarUltimoPaciente() {
 
 function modificarTitulo() {
   let titulo = document.querySelector("#tituloPrincipal");
-  console.log(titulo);
   titulo.style.color = "blueviolet";
   titulo.style.textAlign = "center";
 }
@@ -442,7 +404,6 @@ function buscarImcMinimo() {
   );
   if (arrayPersonasRegistradas) {
     const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
-    console.log(arrayImc)
     imcMinimo = Math.min(...arrayImc);
     id = arrayImc.indexOf(imcMinimo) + 1;
     console.log(id);
