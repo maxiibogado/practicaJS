@@ -3,18 +3,28 @@ personasRegistradasDia = [];
 personaRegistrada = [];
 
 
-
-const borrarListadoPacientes = () => {
- 
-  localStorage.getItem("personasRegistradas") && localStorage.removeItem("personasRegistradas");
-  arrayPersonasRegistradas = [];
-
+const eliminarFilas = () => {
   const listaTr = document.querySelectorAll("tr");
   listaTr.forEach((elemento, i) => {
     if (i != 0) {
       elemento.remove();
     }
   });
+}
+
+const borrarListadoPacientes = () => {
+ 
+  localStorage.getItem("personasRegistradas") && localStorage.removeItem("personasRegistradas");
+  arrayPersonasRegistradas = [];
+
+  // const listaTr = document.querySelectorAll("tr");
+  // listaTr.forEach((elemento, i) => {
+  //   if (i != 0) {
+  //     elemento.remove();
+  //   }
+  // });
+  eliminarFilas();
+
 };
 
 const capitalizarPrimeraLetra = (palabra) => {
@@ -76,12 +86,14 @@ function mostrarListado() {
 
   arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
 
-  const listaTr = document.querySelectorAll("tr");
-  listaTr.forEach((elemento, i) => {
-    if (i != 0) {
-      elemento.remove();
-    }
-  });
+  // const listaTr = document.querySelectorAll("tr");
+  // listaTr.forEach((elemento, i) => {
+  //   if (i != 0) {
+  //     elemento.remove();
+  //   }
+  // });
+
+  eliminarFilas();
 
   const tbody = document.querySelector("tbody");
   arrayPersonasRegistradas.forEach((persona, i) => {
@@ -119,20 +131,36 @@ const limpiarFormulario = () => {
 const btnAgregarPaciente = document.querySelector("#addPaciente");
 btnAgregarPaciente.addEventListener("click", agregarPaciente);
 const btnLimpiarFormulario = document.querySelector("#limpiarForm");
-if (btnLimpiarFormulario) {
-  btnLimpiarFormulario.addEventListener("click", limpiarFormulario);
-}
+// if (btnLimpiarFormulario) {
+//   btnLimpiarFormulario.addEventListener("click", limpiarFormulario);
+// }
+btnLimpiarFormulario &&  btnLimpiarFormulario.addEventListener("click", limpiarFormulario);
+
+
 const btnBorrarPaciente = document.querySelector("#borrarPaciente");
-btnBorrarPaciente.addEventListener("click", borrarUltimoPaciente);
+// btnBorrarPaciente.addEventListener("click", borrarUltimoPaciente);
+
+btnBorrarPaciente && btnBorrarPaciente.addEventListener("click", borrarUltimoPaciente);
+
+
 const btnBuscarImcMaximo = document.querySelector("#imcMaximo");
-btnBuscarImcMaximo.addEventListener("click", buscarImcMaximo);
+btnBuscarImcMaximo && btnBuscarImcMaximo.addEventListener("click", buscarImcMaximo);
+
+// btnBuscarImcMaximo.addEventListener("click", buscarImcMaximo);
+
+
 const btnBuscarImcMinimo = document.querySelector("#imcMinimo");
-btnBuscarImcMinimo.addEventListener("click", buscarImcMinimo);
+btnBuscarImcMinimo && btnBuscarImcMinimo.addEventListener("click", buscarImcMinimo);
+
+// btnBuscarImcMinimo.addEventListener("click", buscarImcMinimo);
+
 const btnMostrarListado = document.querySelector("#listado");
 btnMostrarListado.addEventListener("click", mostrarListado);
 
 const searchBar = document.querySelector("#search");
-searchBar.addEventListener("input", buscarPorBarra);
+btnBorrarPaciente && searchBar.addEventListener("input", buscarPorBarra);
+
+  // searchBar.addEventListener("input", buscarPorBarra);
 
 const btnBorrarListadoDePaciente = document.querySelector(
   "#borrarListaDePacientes"
@@ -160,12 +188,14 @@ function buscarPorBarra() {
   );
   console.log(arrayPersonasRegistradasAbuscar);
 
-  const listaTr = document.querySelectorAll("tr");
-  listaTr.forEach((elemento, i) => {
-    if (i != 0) {
-      elemento.remove();
-    }
-  });
+  // const listaTr = document.querySelectorAll("tr");
+  // listaTr.forEach((elemento, i) => {
+  //   if (i != 0) {
+  //     elemento.remove();
+  //   }
+  // });
+
+  eliminarFilas();
 
   const tbody = document.querySelector("tbody");
   arrayPersonasRegistradasAbuscar.forEach((persona, i) => {
@@ -247,10 +277,9 @@ function borrarUltimoPaciente() {
   arrayPersonasRegistradas = JSON.parse(
     localStorage.getItem("personasRegistradas")
   );
-  arrayPersonasRegistradas.pop();
-  const listaTr = document.querySelectorAll("tr");
-  console.log(listaTr);
 
+  arrayPersonasRegistradas &&   arrayPersonasRegistradas.pop();
+  const listaTr = document.querySelectorAll("tr");
   listaTr.forEach((elemento, i) => {
     if (i == listaTr.length - 1 && i != 0) {
       elemento.remove();
@@ -361,12 +390,14 @@ function buscarImcMaximo() {
     );
     console.log(personaImcMaximo);
 
-    const listaTr = document.querySelectorAll("tr");
-    listaTr.forEach((elemento, i) => {
-      if (i != 0) {
-        elemento.remove();
-      }
-    });
+    // const listaTr = document.querySelectorAll("tr");
+    // listaTr.forEach((elemento, i) => {
+    //   if (i != 0) {
+    //     elemento.remove();
+    //   }
+    // });
+
+    eliminarFilas();
     console.log(personaImcMaximo.imc);
 
     tbody = document.querySelector("tbody");
@@ -413,12 +444,14 @@ function buscarImcMinimo() {
     );
     console.log(personaImcMinimo);
 
-    const listaTr = document.querySelectorAll("tr");
-    listaTr.forEach((elemento, i) => {
-      if (i != 0) {
-        elemento.remove();
-      }
-    });
+    // const listaTr = document.querySelectorAll("tr");
+    // listaTr.forEach((elemento, i) => {
+    //   if (i != 0) {
+    //     elemento.remove();
+    //   }
+    // });
+
+    eliminarFilas();
     console.log(personaImcMinimo);
 
     tbody = document.querySelector("tbody");
