@@ -235,8 +235,10 @@ function agregarPaciente() {
   imc = calcularIMC(peso, estatura);
 
   const paciente = new Persona(dni, nombre, apellido, estatura, peso, imc);
-  arrayPersonasRegistradas.push(paciente);
-  personaRegistrada.push(paciente);
+
+
+  arrayPersonasRegistradas &&  arrayPersonasRegistradas.push(paciente);
+  personaRegistrada &&  personaRegistrada.push(paciente);
   localStorage.setItem(
     "personasRegistradas",
     JSON.stringify(arrayPersonasRegistradas)
@@ -259,7 +261,7 @@ function agregarPaciente() {
     const tr = document.createElement("tr");
 
     tr.innerHTML = ` 
-  <th scope="col">${arrayPersonasRegistradas.length}</th>
+  <th scope="col">${arrayPersonasRegistradas && arrayPersonasRegistradas.length}</th>
   <td>${persona.dni}</td>
   <td>${persona.nombre}</td>
   <td>${persona.apellido}</td>
@@ -274,11 +276,14 @@ function agregarPaciente() {
 }
 
 function borrarUltimoPaciente() {
-  arrayPersonasRegistradas = JSON.parse(
-    localStorage.getItem("personasRegistradas")
-  );
+  // arrayPersonasRegistradas = JSON.parse(
+  //   localStorage.getItem("personasRegistradas")
+  // );
 
-  arrayPersonasRegistradas &&   arrayPersonasRegistradas.pop();
+  arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
+
+  // arrayPersonasRegistradas && 
+  arrayPersonasRegistradas.pop();
   const listaTr = document.querySelectorAll("tr");
   listaTr.forEach((elemento, i) => {
     if (i == listaTr.length - 1 && i != 0) {
