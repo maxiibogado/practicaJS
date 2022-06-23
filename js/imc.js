@@ -214,6 +214,14 @@ function agregarPaciente() {
   });
 
   personaRegistrada = [];
+
+  Swal.fire({
+    position: 'top-mid',
+    icon: 'success',
+    title: 'Su paciente ha sido guardado correctamente.',
+    showConfirmButton: false,
+    timer: 1000
+  })
 }
 
 function borrarUltimoPaciente() {
