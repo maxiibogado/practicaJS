@@ -13,8 +13,27 @@ const eliminarFilas = () => {
 }
 
 const borrarListadoPacientes = () => {
-  arrayPersonasRegistradas = (localStorage.getItem("personasRegistradas") && localStorage.removeItem("personasRegistradas")) || [];
-  eliminarFilas();
+  Swal.fire({
+    title: 'Estás seguro de eliminar todo el listado de pacientes?',
+    text: "No podrás recuperarlo",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: 'green',
+    cancelButtonColor: 'red',
+    confirmButtonText: 'Si, borralo!',
+    cancelButtonText: 'No, no borrar!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Deleted!',
+        'Su listado de pacientes ha sido borrado',
+        'success'
+      )
+      arrayPersonasRegistradas = (localStorage.getItem("personasRegistradas") && localStorage.removeItem("personasRegistradas")) || [];
+      eliminarFilas();
+    }
+  })
+ 
 };
 
 const capitalizarPrimeraLetra = (palabra) => {
@@ -321,6 +340,14 @@ function mostrar() {
 }
 
 function buscarImcMenores() {
+  
+  Swal.fire(
+    'Felicitar a los pacientes!',
+    'Llamar y dar el alta!',
+    'success'
+  )
+  
+  
   arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
   const arrayImc = arrayPersonasRegistradas.map(persona => persona.imc);
   
@@ -379,6 +406,13 @@ function buscarImcMenores() {
 } 
 
 function buscarImcMayores() {
+  
+  Swal.fire(
+    'Cuidado con los pacientes!',
+    'Verificar comidas y realizar un llamado para dar seguimiento!',
+    'warning'
+  )
+  
   arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
   const arrayImc = arrayPersonasRegistradas.map(persona => persona.imc);
   
