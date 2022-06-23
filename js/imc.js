@@ -89,11 +89,31 @@ function mostrarListado() {
 }
 
 const limpiarFormulario = () => {
-  document.querySelector("#dni").value = "";
-  document.querySelector("#nombre").value = "";
-  document.querySelector("#apellido").value = "";
-  document.querySelector("#estatura").value = "";
-  document.querySelector("#peso").value = "";
+  Swal.fire({
+    title: '¿Estás Seguro?',
+    text: "No serás capaz de volver atrás",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Si, deseo limpiar el formulario!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Borrado!',
+        'Se ha limpiado el formulario.',
+        'success'
+      )
+      document.querySelector("#dni").value = "";
+      document.querySelector("#nombre").value = "";
+      document.querySelector("#apellido").value = "";
+      document.querySelector("#estatura").value = "";
+      document.querySelector("#peso").value = "";
+    }
+  })
+  
+  
+  
 };
 
 const btnAgregarPaciente = document.querySelector("#addPaciente");
@@ -211,7 +231,7 @@ function agregarPaciente() {
     <td style="color:${color}">${persona.imc}</td>
     `;
       tbody.append(tr);
-  });
+    });
 
   personaRegistrada = [];
 
