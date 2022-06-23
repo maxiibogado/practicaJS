@@ -106,10 +106,10 @@ const btnBorrarPaciente = document.querySelector("#borrarPaciente");
 btnBorrarPaciente && btnBorrarPaciente.addEventListener("click", borrarUltimoPaciente);
 
 const btnBuscarImcMaximo = document.querySelector("#imcMaximo");
-btnBuscarImcMaximo && btnBuscarImcMaximo.addEventListener("click", buscarImcMaximo);
+btnBuscarImcMaximo && btnBuscarImcMaximo.addEventListener("click", buscarImcMayores);
 
 const btnBuscarImcMinimo = document.querySelector("#imcMinimo");
-btnBuscarImcMinimo && btnBuscarImcMinimo.addEventListener("click", buscarImcMinimo);
+btnBuscarImcMinimo && btnBuscarImcMinimo.addEventListener("click", buscarImcMenores);
 
 
 const btnMostrarListado = document.querySelector("#listado");
@@ -293,39 +293,139 @@ function mostrar() {
 }
 
 function buscarImcMenores() {
-  imcTope = Number(prompt("Ingrese el imc de tope"));
-  const imcBuscadoPorTope = arrayPersonasRegistradas.filter(
-    (persona) => persona.imc < imcTope
-  );
-  if (imcBuscadoPorTope.length == 0) {
-    alert("No hay coincidencia en al búsqueda");
-  } else {
-    console.log("Las personas buscadas con ese IMC son: %o", imcBuscadoPorTope);
-  }
-  inicioPrograma();
-}
+  arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
+  const arrayImc = arrayPersonasRegistradas.map(persona => persona.imc);
+  
+  
+  imcMinimo1 = Math.min(...arrayImc);
+  indices = []
+  idMin = arrayImc.indexOf(imcMinimo1);
+  
+  while (idMin != -1) {
+      indices.push(idMin);
+      idMin = arrayImc.indexOf(imcMinimo1, idMin + 1);
+    }
+
+
+    personasImcMinimo = arrayPersonasRegistradas.filter(persona => persona.imc == imcMinimo1);
+
+   personasImcMinimoOk = [
+    ...personasImcMinimo,
+    indices
+    
+  ]
+
+  console.log(personasImcMinimoOk)
+  
+  eliminarFilas();
+  personasImcMinimoOk.forEach((elemento,i)=>{
+   
+    if (i == personasImcMinimoOk.length -1) {
+       return;
+    }
+    tbody = document.querySelector("tbody");
+
+    if (personasImcMinimoOk[i].imc < 25) {
+      color = "green";
+    } else if (personasImcMinimoOk[i].imc > 25 && personasImcMinimoOk[i].imc < 30) {
+      color = "yellow";
+    } else {
+      color = "red";
+    }
+
+    tr = document.createElement("tr");
+
+    tr.innerHTML = ` 
+    <th scope="col">${personasImcMinimoOk[personasImcMinimoOk.length-1][i] +1}</th>
+    <td>${personasImcMinimoOk[i].dni}</td>
+    <td>${personasImcMinimoOk[i].nombre}</td>
+    <td>${personasImcMinimoOk[i].apellido}</td>
+    <td>${personasImcMinimoOk[i].estatura}</td>
+    <td>${personasImcMinimoOk[i].peso}</td>
+    <td style="color:${color}">${personasImcMinimoOk[i].imc}</td>
+    `;
+      tbody.append(tr);
+
+
+  })
+} 
 
 function buscarImcMayores() {
-  imcTope = Number(prompt("Ingrese el imc de tope inferior"));
-  const imcBuscadoPorTope = arrayPersonasRegistradas.filter(
-    (persona) => persona.imc > imcTope
-  );
-  if (imcBuscadoPorTope.length == 0) {
-    alert("No hay coincidencia en al búsqueda");
-  } else {
-    console.log("Las personas buscadas con ese IMC son: %o", imcBuscadoPorTope);
-  }
-  inicioPrograma();
+  arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
+  const arrayImc = arrayPersonasRegistradas.map(persona => persona.imc);
+  
+  
+  imcMaximo = Math.max(...arrayImc);
+  indices = []
+  idMax = arrayImc.indexOf(imcMaximo);
+  
+  while (idMax != -1) {
+      indices.push(idMax);
+      idMax = arrayImc.indexOf(imcMaximo, idMax + 1);
+    }
+
+
+  personasImcMaximo = arrayPersonasRegistradas.filter(persona => persona.imc == imcMaximo);
+
+   personasImcMaximoOk = [
+    ...personasImcMaximo,
+    indices
+    
+  ]
+
+  console.log(personasImcMaximoOk)
+  
+  eliminarFilas();
+  personasImcMaximoOk.forEach((elemento,i)=>{
+   
+    if (i == personasImcMaximoOk.length -1) {
+       return;
+    }
+    tbody = document.querySelector("tbody");
+
+    if (personasImcMaximoOk[i].imc < 25) {
+      color = "green";
+    } else if (personasImcMaximoOk[i].imc > 25 && personasImcMaximoOk[i].imc < 30) {
+      color = "yellow";
+    } else {
+      color = "red";
+    }
+
+    tr = document.createElement("tr");
+
+    tr.innerHTML = ` 
+    <th scope="col">${personasImcMaximoOk[personasImcMaximoOk.length-1][i] +1}</th>
+    <td>${personasImcMaximoOk[i].dni}</td>
+    <td>${personasImcMaximoOk[i].nombre}</td>
+    <td>${personasImcMaximoOk[i].apellido}</td>
+    <td>${personasImcMaximoOk[i].estatura}</td>
+    <td>${personasImcMaximoOk[i].peso}</td>
+    <td style="color:${color}">${personasImcMaximoOk[i].imc}</td>
+    `;
+      tbody.append(tr);
+
+
+  })
+
 }
 
 function buscarImcMaximo() {
-  arrayPersonasRegistradas = JSON.parse(
-    localStorage.getItem("personasRegistradas")
-  );
+
+  arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
+
   if (arrayPersonasRegistradas) {
     const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
+    console.log(arrayImc)
     imcMaximo = Math.max(...arrayImc);
+    console.log(imcMaximo)
+    indices = []
     idMax = arrayImc.indexOf(imcMaximo) + 1;
+    while (imcMaximo != -1) {
+      indices.push(imcMaximo);
+      idMax = array.indexOf(imcMaximo, idMax + 1);
+    }
+    console.log(indices)
+    console.log
     personaImcMaximo = arrayPersonasRegistradas.find(
       (persona) => persona.imc == imcMaximo
     );
