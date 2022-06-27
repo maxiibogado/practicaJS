@@ -211,25 +211,13 @@ async function importarListado() {
   const response =  await fetch('../data.json');
   const data =  await response.json();
   console.log(data)
-  imc = calcularIMC(data.peso, data.estatura);
-  const paciente = new Persona(data.dni, data.nombre, data.apellido, data.estatura, data.peso, imc);
-  console.log(paciente)
-  arrayPersonasRegistradas &&  arrayPersonasRegistradas.push(paciente);
-  personaRegistrada &&  personaRegistrada.push(paciente);
-  localStorage.setItem(
-    "personasRegistradas",
-    JSON.stringify(arrayPersonasRegistradas)
-  );
-  localStorage.setItem(
-    "personaRegistradaDia",
-    JSON.stringify(personaRegistrada)
-  );
-
+  localStorage.getItem("personasRegistradas");
+  localStorage.setItem( "personasRegistradas",JSON.stringify(data));
   const tbody = document.querySelector("tbody");
-  personaRegistrada.forEach((persona) => {
-    if (imc < 25) {
+  data.forEach((persona, i) => {
+    if (persona.imc < 25) {
       color = "green";
-    } else if (imc > 25 && imc < 30) {
+    } else if (persona.imc > 25 && persona.imc < 30) {
       color = "yellow";
     } else {
       color = "red";
@@ -238,7 +226,7 @@ async function importarListado() {
     const tr = document.createElement("tr");
 
     tr.innerHTML = ` 
-    <th scope="col">${arrayPersonasRegistradas && arrayPersonasRegistradas.length}</th>
+    <th scope="col">${i + 1}</th>
     <td>${persona.dni}</td>
     <td>${persona.nombre}</td>
     <td>${persona.apellido}</td>
@@ -246,18 +234,57 @@ async function importarListado() {
     <td>${persona.peso}</td>
     <td style="color:${color}">${persona.imc}</td>
     `;
-      tbody.append(tr);
-    });
+    tbody.append(tr);
+  });
 
-  personaRegistrada = [];
 
-  Swal.fire({
-    position: 'top-mid',
-    icon: 'success',
-    title: 'Su paciente ha sido guardado correctamente.',
-    showConfirmButton: false,
-    timer: 1000
-  })
+  // imc = calcularIMC(data.peso, data.estatura);
+  // const paciente = new Persona(data.dni, data.nombre, data.apellido, data.estatura, data.peso, imc);
+  // console.log(paciente)
+  // arrayPersonasRegistradas &&  arrayPersonasRegistradas.push(paciente);
+  // personaRegistrada &&  personaRegistrada.push(paciente);
+  // localStorage.setItem(
+  //   "personasRegistradas",
+  //   JSON.stringify(arrayPersonasRegistradas)
+  // );
+  // localStorage.setItem(
+  //   "personaRegistradaDia",
+  //   JSON.stringify(personaRegistrada)
+  // );
+
+  // const tbody = document.querySelector("tbody");
+  // personaRegistrada.forEach((persona) => {
+  //   if (imc < 25) {
+  //     color = "green";
+  //   } else if (imc > 25 && imc < 30) {
+  //     color = "yellow";
+  //   } else {
+  //     color = "red";
+  //   }
+
+  //   const tr = document.createElement("tr");
+
+  //   tr.innerHTML = ` 
+  //   <th scope="col">${arrayPersonasRegistradas && arrayPersonasRegistradas.length}</th>
+  //   <td>${persona.dni}</td>
+  //   <td>${persona.nombre}</td>
+  //   <td>${persona.apellido}</td>
+  //   <td>${persona.estatura}</td>
+  //   <td>${persona.peso}</td>
+  //   <td style="color:${color}">${persona.imc}</td>
+  //   `;
+  //     tbody.append(tr);
+  //   });
+
+  // personaRegistrada = [];
+
+  // Swal.fire({
+  //   position: 'top-mid',
+  //   icon: 'success',
+  //   title: 'Su paciente ha sido guardado correctamente.',
+  //   showConfirmButton: false,
+  //   timer: 1000
+  // })
 
 }
 

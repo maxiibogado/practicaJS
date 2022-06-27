@@ -1,2 +1,4 @@
-
-    {"dni": 37843550, "nombre": "Maximiliano Ariel", "apellido": "Bogado","estatura":1.78,"peso":88}
+[
+    {"dni": 37843550, "nombre": "Maximiliano Ariel", "apellido": "Bogado","estatura":1.78,"peso":88,"imc":27.77},
+    {"dni": 92899424, "nombre": "Patricia Ramona", "apellido": "Morinigo","estatura":1.60,"peso":66,"imc":25.78}
+]
