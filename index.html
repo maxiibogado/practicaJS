@@ -34,15 +34,15 @@
       <form class="form-inline" action="">
         
       <div class="input-group">
-        <input type="text" class="form-control" id="dni" placeholder="Ingrese su número de DNI"  name="dni">
-        <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre"  name="nombre">
-        <input type="text" class="form-control" id="apellido" placeholder="Ingrese su apellido" name="apellido">
+        <input type="text" class="form-control" id="dni" placeholder="Ingrese su número de DNI"  name="dni" required>
+        <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre"  name="nombre" required>
+        <input type="text" class="form-control" id="apellido" placeholder="Ingrese su apellido" name="apellido" required>
       </div>
       <br>
       <br>
       <div class="input-group">
-        <input type="number" class="form-control" id="estatura" placeholder="Ingrese su estatura en metros" name="estatura">
-        <input type="number" class="form-control" id="peso" placeholder="Ingrese su peso en kilogramos" name="peso">
+        <input type="number" class="form-control" id="estatura" placeholder="Ingrese su estatura en metros" name="estatura" required>
+        <input type="number" class="form-control" id="peso" placeholder="Ingrese su peso en kilogramos" name="peso" required>
       </div>
       <br>  
       <div class="input-group">
@@ -85,6 +85,7 @@
        <tbody>
       </tbody>
     </table>
+     <button id ="listadojson" type="button" class="btn btn-primary"> Importar listado de pacientes</button>
      <button id ="listado" type="button" class="btn btn-success"> Mostrar listado de pacientes</button>
      <button id ="borrarPaciente" type="button" class="btn btn-warning"> Eliminar último paciente</button>
      <button id ="borrarListaDePacientes" type="button" class="btn btn-danger"> Eliminar lista de pacientes</button>

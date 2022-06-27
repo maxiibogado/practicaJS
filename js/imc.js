@@ -135,6 +135,9 @@ const limpiarFormulario = () => {
   
 };
 
+const btnImportarPacientes = document.querySelector("#listadojson");
+btnImportarPacientes.addEventListener("click", importarListado);
+
 const btnAgregarPaciente = document.querySelector("#addPaciente");
 btnAgregarPaciente.addEventListener("click", agregarPaciente);
 
@@ -201,6 +204,63 @@ function buscarPorBarra() {
       tbody.append(tr);
   });
 }
+
+
+
+async function importarListado() {
+  const response =  await fetch('../data.json');
+  const data =  await response.json();
+  console.log(data)
+  imc = calcularIMC(data.peso, data.estatura);
+  const paciente = new Persona(data.dni, data.nombre, data.apellido, data.estatura, data.peso, imc);
+  console.log(paciente)
+  arrayPersonasRegistradas &&  arrayPersonasRegistradas.push(paciente);
+  personaRegistrada &&  personaRegistrada.push(paciente);
+  localStorage.setItem(
+    "personasRegistradas",
+    JSON.stringify(arrayPersonasRegistradas)
+  );
+  localStorage.setItem(
+    "personaRegistradaDia",
+    JSON.stringify(personaRegistrada)
+  );
+
+  const tbody = document.querySelector("tbody");
+  personaRegistrada.forEach((persona) => {
+    if (imc < 25) {
+      color = "green";
+    } else if (imc > 25 && imc < 30) {
+      color = "yellow";
+    } else {
+      color = "red";
+    }
+
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = ` 
+    <th scope="col">${arrayPersonasRegistradas && arrayPersonasRegistradas.length}</th>
+    <td>${persona.dni}</td>
+    <td>${persona.nombre}</td>
+    <td>${persona.apellido}</td>
+    <td>${persona.estatura}</td>
+    <td>${persona.peso}</td>
+    <td style="color:${color}">${persona.imc}</td>
+    `;
+      tbody.append(tr);
+    });
+
+  personaRegistrada = [];
+
+  Swal.fire({
+    position: 'top-mid',
+    icon: 'success',
+    title: 'Su paciente ha sido guardado correctamente.',
+    showConfirmButton: false,
+    timer: 1000
+  })
+
+}
+
 
 function agregarPaciente() {
   dni = verificarDato(Number(document.querySelector("#dni").value));
@@ -316,9 +376,9 @@ function modificarTitulo() {
 // };
 
 function verificarDato(dato) {
-  while (dato == 0 || Number.isNaN(dato)) {
-    dato = Number(prompt("Ingrese su dato correctamente"));
-  }
+    // while (dato == 0 || Number.isNaN(dato)) {
+    //   dato = Number(prompt("Ingrese su dato asd"));
+    // }
   return dato;
 }
 
