@@ -211,10 +211,15 @@ async function importarListado() {
   const response =  await fetch('../data.json');
   const data =  await response.json();
   console.log(data)
-  localStorage.getItem("personasRegistradas");
-  localStorage.setItem( "personasRegistradas",JSON.stringify(data));
+  arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
+  arrayPersonasRegistradas = [
+    ...arrayPersonasRegistradas,
+    ...data
+  ]
+  console.log(arrayPersonasRegistradas);
+  eliminarFilas();
   const tbody = document.querySelector("tbody");
-  data.forEach((persona, i) => {
+  arrayPersonasRegistradas.forEach((persona, i) => {
     if (persona.imc < 25) {
       color = "green";
     } else if (persona.imc > 25 && persona.imc < 30) {
@@ -235,6 +240,8 @@ async function importarListado() {
     <td style="color:${color}">${persona.imc}</td>
     `;
     tbody.append(tr);
+
+    localStorage.setItem("personasRegistradas",JSON.stringify(arrayPersonasRegistradas));
   });
 
 
