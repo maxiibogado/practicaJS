@@ -297,6 +297,9 @@ async function importarListado() {
 
 
 function agregarPaciente() {
+
+  arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
+
   dni = verificarDato(Number(document.querySelector("#dni").value));
   nombre = datoSinEspacio(
     capitalizarPrimeraLetra(document.querySelector("#nombre").value)
@@ -306,8 +309,42 @@ function agregarPaciente() {
   );
   estatura = verificarDato(Number(document.querySelector("#estatura").value));
   peso = verificarDato(Number(document.querySelector("#peso").value));
-  imc = calcularIMC(peso, estatura);
 
+  arrayDNIRegistrados = arrayPersonasRegistradas.map(persona=>persona.dni);
+  
+  if(dni == 0) {
+    alert('Ingrese su DNI, por favor');
+    document.fvalida.dni.focus();
+    return ;
+  } else if (arrayDNIRegistrados.includes(dni)) {
+    alert("Número de DNI ya ingresado. Ingrese un nuevo DNI")
+    document.querySelector("#dni").value = "";
+    document.fvalida.dni.focus();
+    return;
+  }
+
+  if (nombre.length == 0) {
+    alert('Ingrese su nombre, por favor');
+    document.fvalida.nombre.focus();
+    return;
+  }
+  if (apellido.length == 0) {
+    alert('Ingresa su apellido, por favor');
+    document.fvalida.apellido.focus();
+    return;
+  } 
+  if(estatura == 0) {
+    alert('Ingresa su altura, por favor');
+    document.fvalida.estatura.focus();
+    return;
+  } 
+  if(peso == 0) {
+    alert('Ingresa su altura, por favor');
+    document.fvalida.peso.focus();
+    return;
+  }    
+
+  imc = calcularIMC(peso, estatura);
   const paciente = new Persona(dni, nombre, apellido, estatura, peso, imc);
 
 
