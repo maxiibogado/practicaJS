@@ -243,56 +243,6 @@ async function importarListado() {
 
     localStorage.setItem("personasRegistradas",JSON.stringify(arrayPersonasRegistradas));
   });
-
-
-  // imc = calcularIMC(data.peso, data.estatura);
-  // const paciente = new Persona(data.dni, data.nombre, data.apellido, data.estatura, data.peso, imc);
-  // console.log(paciente)
-  // arrayPersonasRegistradas &&  arrayPersonasRegistradas.push(paciente);
-  // personaRegistrada &&  personaRegistrada.push(paciente);
-  // localStorage.setItem(
-  //   "personasRegistradas",
-  //   JSON.stringify(arrayPersonasRegistradas)
-  // );
-  // localStorage.setItem(
-  //   "personaRegistradaDia",
-  //   JSON.stringify(personaRegistrada)
-  // );
-
-  // const tbody = document.querySelector("tbody");
-  // personaRegistrada.forEach((persona) => {
-  //   if (imc < 25) {
-  //     color = "green";
-  //   } else if (imc > 25 && imc < 30) {
-  //     color = "yellow";
-  //   } else {
-  //     color = "red";
-  //   }
-
-  //   const tr = document.createElement("tr");
-
-  //   tr.innerHTML = ` 
-  //   <th scope="col">${arrayPersonasRegistradas && arrayPersonasRegistradas.length}</th>
-  //   <td>${persona.dni}</td>
-  //   <td>${persona.nombre}</td>
-  //   <td>${persona.apellido}</td>
-  //   <td>${persona.estatura}</td>
-  //   <td>${persona.peso}</td>
-  //   <td style="color:${color}">${persona.imc}</td>
-  //   `;
-  //     tbody.append(tr);
-  //   });
-
-  // personaRegistrada = [];
-
-  // Swal.fire({
-  //   position: 'top-mid',
-  //   icon: 'success',
-  //   title: 'Su paciente ha sido guardado correctamente.',
-  //   showConfirmButton: false,
-  //   timer: 1000
-  // })
-
 }
 
 
@@ -434,22 +384,10 @@ function modificarTitulo() {
   titulo.style.textAlign = "center";
 }
 
-// const definirComposicionCorporal = (imc) => {
-//   if (imc < 18.5) {
-//     alert("Composición corporal: Peso inferior al normal");
-//   } else if (imc > 18.5 && imc < 24.9) {
-//     alert("Composición corporal: Peso normal");
-//   } else if (imc > 25 && imc < 29.9) {
-//     alert("Composición corporal: Peso superior al normal");
-//   } else {
-//     alert("Composición corporal: Obesidad");
-//   }
-// };
+
 
 function verificarDato(dato) {
-    // while (dato == 0 || Number.isNaN(dato)) {
-    //   dato = Number(prompt("Ingrese su dato asd"));
-    // }
+  
   return dato;
 }
 
@@ -460,31 +398,6 @@ function datoSinEspacio(dato) {
 function calcularIMC(peso, altura) {
   return Number((peso / Math.pow(altura, 2)).toFixed(2));
 }
-
-// function mostrar() {
-//   dni = verificarDato(Number(prompt("Ingrese su DNI sin guiones ni puntos")));
-//   nombre = datoSinEspacio(capitalizarPrimeraLetra(prompt("Ingrese su nombre")));
-//   apellido = datoSinEspacio(
-//     capitalizarPrimeraLetra(prompt("Ingrese su apellido"))
-//   );
-//   estatura = verificarDato(Number(prompt("Ingrese su estatura en metros")));
-//   peso = verificarDato(Number(prompt("Ingrese su peso en KG")));
-//   imc = calcularIMC(peso, estatura);
-//   alert("Su IMC es: " + imc);
-//   definirComposicionCorporal(imc);
-//   const objeto1 = new Persona(dni, nombre, apellido, estatura, peso, imc);
-//   personasRegistradasDia.push(objeto1);
-//   if (confirm("Quiere verificar otra persona")) {
-//     mostrar();
-//   } else {
-//     console.log(
-//       `Estás son las personas registradas hoy en día ${JSON.stringify(
-//         personasRegistradasDia
-//       )}`
-//     );
-//     console.table(personasRegistradasDia);
-//   }
-// }
 
 function buscarImcMenores() {
   
@@ -617,94 +530,6 @@ function buscarImcMayores() {
   })
 
 }
-
-// function buscarImcMaximo() {
-
-//   arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
-
-//   if (arrayPersonasRegistradas) {
-//     const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
-//     console.log(arrayImc)
-//     imcMaximo = Math.max(...arrayImc);
-//     console.log(imcMaximo)
-//     indices = []
-//     idMax = arrayImc.indexOf(imcMaximo) + 1;
-//     while (imcMaximo != -1) {
-//       indices.push(imcMaximo);
-//       idMax = array.indexOf(imcMaximo, idMax + 1);
-//     }
-//     console.log(indices)
-//     console.log
-//     personaImcMaximo = arrayPersonasRegistradas.find(
-//       (persona) => persona.imc == imcMaximo
-//     );
-
-//     eliminarFilas();
-
-//     tbody = document.querySelector("tbody");
-
-//     if (personaImcMaximo.imc < 25) {
-//       color = "green";
-//     } else if (personaImcMaximo.imc > 25 && personaImcMaximo.imc < 30) {
-//       color = "yellow";
-//     } else {
-//       color = "red";
-//     }
-
-//     tr = document.createElement("tr");
-
-//     tr.innerHTML = ` 
-//     <th scope="col">${idMax}</th>
-//     <td>${personaImcMaximo.dni}</td>
-//     <td>${personaImcMaximo.nombre}</td>
-//     <td>${personaImcMaximo.apellido}</td>
-//     <td>${personaImcMaximo.estatura}</td>
-//     <td>${personaImcMaximo.peso}</td>
-//     <td style="color:${color}">${personaImcMaximo.imc}</td>
-//     `;
-//       tbody.append(tr);
-//   }
-// }
-
-//  function buscarImcMinimo() {
-//    arrayPersonasRegistradas = JSON.parse(
-//     localStorage.getItem("personasRegistradas")
-//   );
-//   if (arrayPersonasRegistradas) {
-//     const arrayImc = arrayPersonasRegistradas.map((persona) => persona.imc);
-//     imcMinimo = Math.min(...arrayImc);
-//     id = arrayImc.indexOf(imcMinimo) + 1;
-    
-//     personaImcMinimo = arrayPersonasRegistradas.find(
-//       (persona) => persona.imc == imcMinimo
-//     );
-
-//     eliminarFilas();
-    
-//     tbody = document.querySelector("tbody");
-
-//     if (personaImcMinimo.imc < 25) {
-//       color = "green";
-//     } else if (personaImcMinimo.imc > 25 && personaImcMinimo.imc < 30) {
-//       color = "yellow";
-//     } else {
-//       color = "red";
-//     }
-
-//     tr = document.createElement("tr");
-
-//     tr.innerHTML = ` 
-//     <th scope="col">${id}</th>
-//     <td>${personaImcMinimo.dni}</td>
-//     <td>${personaImcMinimo.nombre}</td>
-//     <td>${personaImcMinimo.apellido}</td>
-//     <td>${personaImcMinimo.estatura}</td>
-//     <td>${personaImcMinimo.peso}</td>
-//     <td style="color:${color}">${personaImcMinimo.imc}</td>
-//     `;
-//       tbody.append(tr);
-//    }
-//  }
 
 implementarDom();
 
