@@ -208,7 +208,7 @@ function buscarPorBarra() {
 
 
 async function importarListado() {
-  const response =  await fetch('../data.json');
+  const response =  await fetch('./data.json');
   const data =  await response.json();
   console.log(data)
   arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
@@ -386,8 +386,7 @@ function modificarTitulo() {
 
 
 
-function verificarDato(dato) {
-  
+function verificarDato(dato) {  
   return dato;
 }
 
