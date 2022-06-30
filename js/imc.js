@@ -207,7 +207,15 @@ function buscarPorBarra() {
 
 
 
-async function importarListado() {
+async function importarListado(e) {
+  
+  arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
+  arrayDNIRegistrados = arrayPersonasRegistradas.map(persona=>persona.dni);
+  
+  if (arrayDNIRegistrados.includes(37843550) || arrayDNIRegistrados.includes(92899424)) {
+    e.target.removeEventListener(e.type, importarListado);  
+  }
+  
   const response =  await fetch('./data.json');
   const data =  await response.json();
   console.log(data)
