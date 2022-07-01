@@ -50,30 +50,32 @@ const capitalizarPrimeraLetra = (palabra) => {
 
 function implementarDom() {
   arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
-
-  const tbody = document.querySelector("tbody");
-  arrayPersonasRegistradas.forEach((persona, i) => {
-    if (persona.imc < 25) {
-      color = "green";
-    } else if (persona.imc > 25 && persona.imc < 30) {
-      color = "yellow";
-    } else {
-      color = "red";
-    }
-
-    const tr = document.createElement("tr");
-
-    tr.innerHTML = ` 
-    <th scope="col">${i + 1}</th>
-    <td>${persona.dni}</td>
-    <td>${persona.nombre}</td>
-    <td>${persona.apellido}</td>
-    <td>${persona.estatura}</td>
-    <td>${persona.peso}</td>
-    <td style="color:${color}">${persona.imc}</td>
-    `;
-    tbody.append(tr);
-  });
+  if (arrayPersonasRegistradas.length>0) {
+    
+    const tbody = document.querySelector("tbody");
+    arrayPersonasRegistradas.forEach((persona, i) => {
+      if (persona.imc < 25) {
+        color = "green";
+      } else if (persona.imc > 25 && persona.imc < 30) {
+        color = "yellow";
+      } else {
+        color = "red";
+      }
+  
+      const tr = document.createElement("tr");
+  
+      tr.innerHTML = ` 
+      <th scope="col">${i + 1}</th>
+      <td>${persona.dni}</td>
+      <td>${persona.nombre}</td>
+      <td>${persona.apellido}</td>
+      <td>${persona.estatura}</td>
+      <td>${persona.peso}</td>
+      <td style="color:${color}">${persona.imc}</td>
+      `;
+      tbody.append(tr);
+    });
+  }
 }
 
 function mostrarListado() {
@@ -209,48 +211,63 @@ function buscarPorBarra() {
 
 async function importarListado(e) {
   
-  arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
-  arrayDNIRegistrados = arrayPersonasRegistradas.map(persona=>persona.dni);
+  // arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
+   // arrayDNIRegistrados = arrayPersonasRegistradas.map(persona=>persona.dni);
   
-  if (arrayDNIRegistrados.includes(37843550) || arrayDNIRegistrados.includes(92899424)) {
-    e.target.removeEventListener(e.type, importarListado);  
-  }
+  // if (arrayDNIRegistrados.includes(37843550) || arrayDNIRegistrados.includes(92899424)) {
+  //   e.target.removeEventListener(e.type, importarListado);  
+  // }
   
   const response =  await fetch('./data.json');
   const data =  await response.json();
-  console.log(data)
+  
   arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
-  arrayPersonasRegistradas = [
-    ...arrayPersonasRegistradas,
-    ...data
-  ]
-  console.log(arrayPersonasRegistradas);
+
+
+
+  arrayPersonasRegistradas = [...data,...arrayPersonasRegistradas];
+
+  let personasMap = arrayPersonasRegistradas.map(persona => {
+    return [JSON.stringify(persona), persona]
+});
+let personasMapArr = new Map(personasMap); // Pares de clave y valor
+
+let unicos = [...personasMapArr.values()]; // Conversión a un array
+
+console.log(unicos);
+  
+
+  
+
   eliminarFilas();
   const tbody = document.querySelector("tbody");
-  arrayPersonasRegistradas.forEach((persona, i) => {
-    if (persona.imc < 25) {
-      color = "green";
-    } else if (persona.imc > 25 && persona.imc < 30) {
-      color = "yellow";
-    } else {
-      color = "red";
-    }
-
-    const tr = document.createElement("tr");
-
-    tr.innerHTML = ` 
-    <th scope="col">${i + 1}</th>
-    <td>${persona.dni}</td>
-    <td>${persona.nombre}</td>
-    <td>${persona.apellido}</td>
-    <td>${persona.estatura}</td>
-    <td>${persona.peso}</td>
-    <td style="color:${color}">${persona.imc}</td>
-    `;
-    tbody.append(tr);
-
-    localStorage.setItem("personasRegistradas",JSON.stringify(arrayPersonasRegistradas));
-  });
+  if (unicos.length>0) {
+    
+    unicos.forEach((unico, i) => {
+      if (unico.imc < 25) {
+        color = "green";
+      } else if (unico.imc > 25 && unico.imc < 30) {
+        color = "yellow";
+      } else {
+        color = "red";
+      }
+  
+      const tr = document.createElement("tr");
+  
+      tr.innerHTML = ` 
+      <th scope="col">${i + 1}</th>
+      <td>${unico.dni}</td>
+      <td>${unico.nombre}</td>
+      <td>${unico.apellido}</td>
+      <td>${unico.estatura}</td>
+      <td>${unico.peso}</td>
+      <td style="color:${color}">${unico.imc}</td>
+      `;
+      tbody.append(tr);
+  
+    });
+    localStorage.setItem("personasRegistradas",JSON.stringify(unicos));
+  }
 }
 
 
@@ -268,7 +285,10 @@ function agregarPaciente() {
   estatura = verificarDato(Number(document.querySelector("#estatura").value));
   peso = verificarDato(Number(document.querySelector("#peso").value));
 
-  arrayDNIRegistrados = arrayPersonasRegistradas.map(persona=>persona.dni);
+  
+  if (arrayPersonasRegistradas.length>0) {
+    arrayDNIRegistrados = arrayPersonasRegistradas.map(persona=>persona.dni);
+  }
   
   if(dni == 0) {
     alert('Ingrese su DNI, por favor');
