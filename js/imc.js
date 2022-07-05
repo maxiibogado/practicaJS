@@ -37,9 +37,6 @@ const borrarListadoPacientes = () => {
 };
 
 const capitalizarPrimeraLetra = (palabra) => {
-  while (palabra == null) {
-    palabra = prompt(`Ingrese su dato correctamente`);
-  }
   let palabraSplit = palabra.toLowerCase().split(" ");
   for (let i = 0; i < palabraSplit.length; i++) {
     palabraSplit[i] =
@@ -48,44 +45,9 @@ const capitalizarPrimeraLetra = (palabra) => {
   return palabraSplit.join(" ");
 };
 
-function implementarDom() {
-  arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
-  if (arrayPersonasRegistradas.length>0) {
-    
-    const tbody = document.querySelector("tbody");
-    arrayPersonasRegistradas.forEach((persona, i) => {
-      if (persona.imc < 25) {
-        color = "green";
-      } else if (persona.imc > 25 && persona.imc < 30) {
-        color = "yellow";
-      } else {
-        color = "red";
-      }
-  
-      const tr = document.createElement("tr");
-  
-      tr.innerHTML = ` 
-      <th scope="col">${i + 1}</th>
-      <td>${persona.dni}</td>
-      <td>${persona.nombre}</td>
-      <td>${persona.apellido}</td>
-      <td>${persona.estatura}</td>
-      <td>${persona.peso}</td>
-      <td style="color:${color}">${persona.imc}</td>
-      `;
-      tbody.append(tr);
-    });
-  }
-}
-
-function mostrarListado() {
-
-  arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
-
-  eliminarFilas();
-
+const mostrarHtml = (personas) => {
   const tbody = document.querySelector("tbody");
-  arrayPersonasRegistradas.forEach((persona, i) => {
+  personas.forEach((persona, i) => {
     if (persona.imc < 25) {
       color = "green";
     } else if (persona.imc > 25 && persona.imc < 30) {
@@ -107,6 +69,22 @@ function mostrarListado() {
     `;
     tbody.append(tr);
   });
+}
+
+function implementarDom() {
+  arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
+  if (arrayPersonasRegistradas.length > 0) {
+    mostrarHtml(arrayPersonasRegistradas);
+  }
+}
+
+function mostrarListado() {
+
+  arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
+
+  eliminarFilas();
+
+  mostrarHtml(arrayPersonasRegistradas);
 }
 
 const limpiarFormulario = () => {
@@ -155,7 +133,6 @@ btnBuscarImcMaximo && btnBuscarImcMaximo.addEventListener("click", buscarImcMayo
 const btnBuscarImcMinimo = document.querySelector("#imcMinimo");
 btnBuscarImcMinimo && btnBuscarImcMinimo.addEventListener("click", buscarImcMenores);
 
-
 const btnMostrarListado = document.querySelector("#listado");
 btnMostrarListado.addEventListener("click", mostrarListado);
 
@@ -182,63 +159,52 @@ function buscarPorBarra() {
 
   eliminarFilas();
 
-  const tbody = document.querySelector("tbody");
-  arrayPersonasRegistradasAbuscar.forEach((persona, i) => {
-    if (persona.imc < 25) {
-      color = "green";
-    } else if (persona.imc > 25 && persona.imc < 30) {
-      color = "yellow";
-    } else {
-      color = "red";
-    }
+  // const tbody = document.querySelector("tbody");
+  // arrayPersonasRegistradasAbuscar.forEach((persona, i) => {
+  //   if (persona.imc < 25) {
+  //     color = "green";
+  //   } else if (persona.imc > 25 && persona.imc < 30) {
+  //     color = "yellow";
+  //   } else {
+  //     color = "red";
+  //   }
 
-    const tr = document.createElement("tr");
+  //   const tr = document.createElement("tr");
 
-    tr.innerHTML = ` 
-    <th scope="col">${i + 1}</th>
-    <td>${persona.dni}</td>
-    <td>${persona.nombre}</td>
-    <td>${persona.apellido}</td>
-    <td>${persona.estatura}</td>
-    <td>${persona.peso}</td>
-    <td style="color:${color}">${persona.imc}</td>
-    `;
-      tbody.append(tr);
-  });
-}
+  //   tr.innerHTML = ` 
+  //   <th scope="col">${i + 1}</th>
+  //   <td>${persona.dni}</td>
+  //   <td>${persona.nombre}</td>
+  //   <td>${persona.apellido}</td>
+  //   <td>${persona.estatura}</td>
+  //   <td>${persona.peso}</td>
+  //   <td style="color:${color}">${persona.imc}</td>
+  //   `;
+  //     tbody.append(tr);
+  // });
+
+   mostrarHtml(arrayPersonasRegistradasAbuscar);
+
+} 
 
 
 
 async function importarListado(e) {
-  
-  // arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
-   // arrayDNIRegistrados = arrayPersonasRegistradas.map(persona=>persona.dni);
-  
-  // if (arrayDNIRegistrados.includes(37843550) || arrayDNIRegistrados.includes(92899424)) {
-  //   e.target.removeEventListener(e.type, importarListado);  
-  // }
-  
+   
   const response =  await fetch('./data.json');
   const data =  await response.json();
   
   arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
-
-
 
   arrayPersonasRegistradas = [...data,...arrayPersonasRegistradas];
 
   let personasMap = arrayPersonasRegistradas.map(persona => {
     return [JSON.stringify(persona), persona]
 });
-let personasMapArr = new Map(personasMap); // Pares de clave y valor
+  let personasMapArr = new Map(personasMap); // Pares de clave y valor
 
-let unicos = [...personasMapArr.values()]; // Conversión a un array
-
-console.log(unicos);
+  let unicos = [...personasMapArr.values()]; // Conversión a un array
   
-
-  
-
   eliminarFilas();
   const tbody = document.querySelector("tbody");
   if (unicos.length>0) {
@@ -275,17 +241,19 @@ function agregarPaciente() {
 
   arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
 
-  dni = verificarDato(Number(document.querySelector("#dni").value));
+  dni = Number(document.querySelector("#dni").value);
   nombre = datoSinEspacio(
     capitalizarPrimeraLetra(document.querySelector("#nombre").value)
   );
   apellido = datoSinEspacio(
     capitalizarPrimeraLetra(document.querySelector("#apellido").value)
   );
-  estatura = verificarDato(Number(document.querySelector("#estatura").value));
-  peso = verificarDato(Number(document.querySelector("#peso").value));
+  estatura = Number(document.querySelector("#estatura").value);
+  peso = Number(document.querySelector("#peso").value);
 
   
+  arrayDNIRegistrados = []
+
   if (arrayPersonasRegistradas.length>0) {
     arrayDNIRegistrados = arrayPersonasRegistradas.map(persona=>persona.dni);
   }
@@ -332,34 +300,32 @@ function agregarPaciente() {
     "personasRegistradas",
     JSON.stringify(arrayPersonasRegistradas)
   );
-  localStorage.setItem(
-    "personaRegistradaDia",
-    JSON.stringify(personaRegistrada)
-  );
 
-  const tbody = document.querySelector("tbody");
-  personaRegistrada.forEach((persona) => {
-    if (imc < 25) {
-      color = "green";
-    } else if (imc > 25 && imc < 30) {
-      color = "yellow";
-    } else {
-      color = "red";
-    }
+    mostrarHtml(personaRegistrada);
+   
+  // const tbody = document.querySelector("tbody");
+  // personaRegistrada.forEach((persona) => {
+  //   if (imc < 25) {
+  //     color = "green";
+  //   } else if (imc > 25 && imc < 30) {
+  //     color = "yellow";
+  //   } else {
+  //     color = "red";
+  //   }
 
-    const tr = document.createElement("tr");
+  //   const tr = document.createElement("tr");
 
-    tr.innerHTML = ` 
-    <th scope="col">${arrayPersonasRegistradas && arrayPersonasRegistradas.length}</th>
-    <td>${persona.dni}</td>
-    <td>${persona.nombre}</td>
-    <td>${persona.apellido}</td>
-    <td>${persona.estatura}</td>
-    <td>${persona.peso}</td>
-    <td style="color:${color}">${persona.imc}</td>
-    `;
-      tbody.append(tr);
-    });
+  //   tr.innerHTML = ` 
+  //   <th scope="col">${arrayPersonasRegistradas && arrayPersonasRegistradas.length}</th>
+  //   <td>${persona.dni}</td>
+  //   <td>${persona.nombre}</td>
+  //   <td>${persona.apellido}</td>
+  //   <td>${persona.estatura}</td>
+  //   <td>${persona.peso}</td>
+  //   <td style="color:${color}">${persona.imc}</td>
+  //   `;
+  //     tbody.append(tr);
+  //   });
 
   personaRegistrada = [];
 
@@ -413,11 +379,6 @@ function modificarTitulo() {
 }
 
 
-
-function verificarDato(dato) {  
-  return dato;
-}
-
 function datoSinEspacio(dato) {
   return dato.trim();
 }
@@ -448,8 +409,7 @@ function buscarImcMenores() {
       idMin = arrayImc.indexOf(imcMinimo1, idMin + 1);
     }
 
-
-    personasImcMinimo = arrayPersonasRegistradas.filter(persona => persona.imc == imcMinimo1);
+  personasImcMinimo = arrayPersonasRegistradas.filter(persona => persona.imc == imcMinimo1);
 
    personasImcMinimoOk = [
     ...personasImcMinimo,
@@ -457,7 +417,6 @@ function buscarImcMenores() {
     
   ]
 
-  console.log(personasImcMinimoOk)
   
   eliminarFilas();
   personasImcMinimoOk.forEach((elemento,i)=>{
