@@ -1,14 +1,17 @@
-personasRegistradasDia = [];
+let personaRegistrada = [];
 
-personaRegistrada = [];
+const obtenerPersonasRegistradas = () => {
+    arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
+}
 
+const almacenarPersonasEnLocalStorage = (mensaje, personas) => {
+  localStorage.setItem(mensaje,JSON.stringify(personas));
+}
 
 const eliminarFilas = () => {
   const listaTr = document.querySelectorAll("tr");
-  listaTr.forEach((elemento, i) => {
-    if (i != 0) {
-      elemento.remove();
-    }
+  listaTr.forEach((fila, numeroFila) => {
+    if (numeroFila != 0) fila.remove();
   });
 }
 
@@ -18,8 +21,8 @@ const borrarListadoPacientes = () => {
     text: "No podrás recuperarlo",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: 'green',
-    cancelButtonColor: 'red',
+    confirmButtonColor: 'red',
+    cancelButtonColor: 'blue',
     confirmButtonText: 'Si, borralo!',
     cancelButtonText: 'No, no borrar!'
   }).then((result) => {
@@ -30,6 +33,7 @@ const borrarListadoPacientes = () => {
         'success'
       )
       arrayPersonasRegistradas = (localStorage.getItem("personasRegistradas") && localStorage.removeItem("personasRegistradas")) || [];
+      
       eliminarFilas();
     }
   })
@@ -47,7 +51,8 @@ const capitalizarPrimeraLetra = (palabra) => {
 
 const mostrarHtml = (personas) => {
   const tbody = document.querySelector("tbody");
-  personas.forEach((persona, i) => {
+  
+  personas.forEach((persona) => {
     if (persona.imc < 25) {
       color = "green";
     } else if (persona.imc > 25 && persona.imc < 30) {
@@ -59,7 +64,6 @@ const mostrarHtml = (personas) => {
     const tr = document.createElement("tr");
 
     tr.innerHTML = ` 
-    <th scope="col">${i + 1}</th>
     <td>${persona.dni}</td>
     <td>${persona.nombre}</td>
     <td>${persona.apellido}</td>
@@ -72,7 +76,7 @@ const mostrarHtml = (personas) => {
 }
 
 function implementarDom() {
-  arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
+  obtenerPersonasRegistradas();
   if (arrayPersonasRegistradas.length > 0) {
     mostrarHtml(arrayPersonasRegistradas);
   }
@@ -80,40 +84,21 @@ function implementarDom() {
 
 function mostrarListado() {
 
-  arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
-
+  obtenerPersonasRegistradas();
+  
   eliminarFilas();
 
   mostrarHtml(arrayPersonasRegistradas);
 }
 
 const limpiarFormulario = () => {
-  Swal.fire({
-    title: '¿Estás Seguro?',
-    text: "No serás capaz de volver atrás",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, deseo limpiar el formulario!'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire(
-        'Borrado!',
-        'Se ha limpiado el formulario.',
-        'success'
-      )
       document.querySelector("#dni").value = "";
       document.querySelector("#nombre").value = "";
       document.querySelector("#apellido").value = "";
       document.querySelector("#estatura").value = "";
       document.querySelector("#peso").value = "";
-    }
-  })
-  
-  
-  
-};
+  }
+
 
 const btnImportarPacientes = document.querySelector("#listadojson");
 btnImportarPacientes.addEventListener("click", importarListado);
@@ -143,120 +128,61 @@ const btnBorrarListadoDePaciente = document.querySelector("#borrarListaDePacient
 btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
 
 function buscarPorBarra() {
-  arrayPersonasRegistradas = JSON.parse(
-    localStorage.getItem("personasRegistradas")
-  );
+  obtenerPersonasRegistradas();
 
-  palabraAbuscar = capitalizarPrimeraLetra(
-    document.querySelector("#search").value
-  );
-  arrayPersonasRegistradasAbuscar = [];
-  arrayPersonasRegistradasAbuscar = arrayPersonasRegistradas.filter(
-    (persona) =>
-      persona.nombre.includes(palabraAbuscar) ||
-      persona.apellido.includes(palabraAbuscar)
-  );
+  palabraAbuscar = capitalizarPrimeraLetra(document.querySelector("#search").value);
+  
+ let arrayPersonasRegistradasAbuscar = arrayPersonasRegistradas.filter((persona) =>  persona.nombre.includes(palabraAbuscar) 
+                                      || persona.apellido.includes(palabraAbuscar)) 
 
   eliminarFilas();
-
-  // const tbody = document.querySelector("tbody");
-  // arrayPersonasRegistradasAbuscar.forEach((persona, i) => {
-  //   if (persona.imc < 25) {
-  //     color = "green";
-  //   } else if (persona.imc > 25 && persona.imc < 30) {
-  //     color = "yellow";
-  //   } else {
-  //     color = "red";
-  //   }
-
-  //   const tr = document.createElement("tr");
-
-  //   tr.innerHTML = ` 
-  //   <th scope="col">${i + 1}</th>
-  //   <td>${persona.dni}</td>
-  //   <td>${persona.nombre}</td>
-  //   <td>${persona.apellido}</td>
-  //   <td>${persona.estatura}</td>
-  //   <td>${persona.peso}</td>
-  //   <td style="color:${color}">${persona.imc}</td>
-  //   `;
-  //     tbody.append(tr);
-  // });
 
    mostrarHtml(arrayPersonasRegistradasAbuscar);
 
 } 
 
-
-
-async function importarListado(e) {
+async function importarListado() {  
    
   const response =  await fetch('./data.json');
-  const data =  await response.json();
   
-  arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
+  const personas =  await response.json();
+  
+  obtenerPersonasRegistradas();
 
-  arrayPersonasRegistradas = [...data,...arrayPersonasRegistradas];
+  arrayPersonasRegistradas = [...personas,...arrayPersonasRegistradas];
 
   let personasMap = arrayPersonasRegistradas.map(persona => {
-    return [JSON.stringify(persona), persona]
-});
+  
+      return [JSON.stringify(persona), persona]
+
+  });
   let personasMapArr = new Map(personasMap); // Pares de clave y valor
 
   let unicos = [...personasMapArr.values()]; // Conversión a un array
   
   eliminarFilas();
-  const tbody = document.querySelector("tbody");
-  if (unicos.length>0) {
-    
-    unicos.forEach((unico, i) => {
-      if (unico.imc < 25) {
-        color = "green";
-      } else if (unico.imc > 25 && unico.imc < 30) {
-        color = "yellow";
-      } else {
-        color = "red";
-      }
-  
-      const tr = document.createElement("tr");
-  
-      tr.innerHTML = ` 
-      <th scope="col">${i + 1}</th>
-      <td>${unico.dni}</td>
-      <td>${unico.nombre}</td>
-      <td>${unico.apellido}</td>
-      <td>${unico.estatura}</td>
-      <td>${unico.peso}</td>
-      <td style="color:${color}">${unico.imc}</td>
-      `;
-      tbody.append(tr);
-  
-    });
-    localStorage.setItem("personasRegistradas",JSON.stringify(unicos));
-  }
-}
 
+  mostrarHtml(unicos);
+
+  almacenarPersonasEnLocalStorage("personasRegistradas",unicos);
+ 
+}
 
 function agregarPaciente() {
 
-  arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
+  obtenerPersonasRegistradas();
 
   dni = Number(document.querySelector("#dni").value);
-  nombre = datoSinEspacio(
-    capitalizarPrimeraLetra(document.querySelector("#nombre").value)
-  );
-  apellido = datoSinEspacio(
-    capitalizarPrimeraLetra(document.querySelector("#apellido").value)
-  );
+  
+  nombre = datoSinEspacio(capitalizarPrimeraLetra(document.querySelector("#nombre").value));
+  
+  apellido = datoSinEspacio(capitalizarPrimeraLetra(document.querySelector("#apellido").value));
+  
   estatura = Number(document.querySelector("#estatura").value);
+  
   peso = Number(document.querySelector("#peso").value);
 
-  
-  arrayDNIRegistrados = []
-
-  if (arrayPersonasRegistradas.length>0) {
-    arrayDNIRegistrados = arrayPersonasRegistradas.map(persona=>persona.dni);
-  }
+   let arrayDNIRegistrados =  arrayPersonasRegistradas.length > 0 ? arrayPersonasRegistradas.map( persona => persona.dni ) : [];  
   
   if(dni == 0) {
     alert('Ingrese su DNI, por favor');
@@ -291,42 +217,17 @@ function agregarPaciente() {
   }    
 
   imc = calcularIMC(peso, estatura);
+  
   const paciente = new Persona(dni, nombre, apellido, estatura, peso, imc);
 
-
   arrayPersonasRegistradas &&  arrayPersonasRegistradas.push(paciente);
+  
   personaRegistrada &&  personaRegistrada.push(paciente);
-  localStorage.setItem(
-    "personasRegistradas",
-    JSON.stringify(arrayPersonasRegistradas)
-  );
+  
+  almacenarPersonasEnLocalStorage("personasRegistradas",arrayPersonasRegistradas);
 
-    mostrarHtml(personaRegistrada);
+  mostrarHtml(personaRegistrada);
    
-  // const tbody = document.querySelector("tbody");
-  // personaRegistrada.forEach((persona) => {
-  //   if (imc < 25) {
-  //     color = "green";
-  //   } else if (imc > 25 && imc < 30) {
-  //     color = "yellow";
-  //   } else {
-  //     color = "red";
-  //   }
-
-  //   const tr = document.createElement("tr");
-
-  //   tr.innerHTML = ` 
-  //   <th scope="col">${arrayPersonasRegistradas && arrayPersonasRegistradas.length}</th>
-  //   <td>${persona.dni}</td>
-  //   <td>${persona.nombre}</td>
-  //   <td>${persona.apellido}</td>
-  //   <td>${persona.estatura}</td>
-  //   <td>${persona.peso}</td>
-  //   <td style="color:${color}">${persona.imc}</td>
-  //   `;
-  //     tbody.append(tr);
-  //   });
-
   personaRegistrada = [];
 
   Swal.fire({
@@ -336,24 +237,17 @@ function agregarPaciente() {
     showConfirmButton: false,
     timer: 1000
   })
+
+  limpiarFormulario();
+
 }
 
 function borrarUltimoPaciente() {
   
-
-
-  Swal.fire({
-    title: '¿Desea eliminar el último paciente ingresado?',
-    showDenyButton: true,
-    showCancelButton: true,
-    confirmButtonText: 'Aceptar',
-    denyButtonText: `Cancelar`,
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire('Eliminado!', '', 'success')
-      arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
-
+      obtenerPersonasRegistradas();
+      
       arrayPersonasRegistradas.pop();
+      
       const listaTr = document.querySelectorAll("tr");
       listaTr.forEach((elemento, i) => {
         if (i == listaTr.length - 1 && i != 0) {
@@ -361,23 +255,16 @@ function borrarUltimoPaciente() {
         }
       });
 
-      localStorage.setItem(
-        "personasRegistradas",
-        JSON.stringify(arrayPersonasRegistradas)
-      );
-    } else if (result.isDenied) {
-      Swal.fire('Paciente NO eliminado', '', '')
-    }
-  })
+      almacenarPersonasEnLocalStorage("personasRegistradas",arrayPersonasRegistradas);
+
+} 
   
-}
 
 function modificarTitulo() {
   let titulo = document.querySelector("#tituloPrincipal");
   titulo.style.color = "blueviolet";
   titulo.style.textAlign = "center";
 }
-
 
 function datoSinEspacio(dato) {
   return dato.trim();
@@ -395,60 +282,18 @@ function buscarImcMenores() {
     'success'
   )
   
+  obtenerPersonasRegistradas() 
   
-  arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
   const arrayImc = arrayPersonasRegistradas.map(persona => persona.imc);
   
-  
   imcMinimo1 = Math.min(...arrayImc);
-  indices = []
-  idMin = arrayImc.indexOf(imcMinimo1);
   
-  while (idMin != -1) {
-      indices.push(idMin);
-      idMin = arrayImc.indexOf(imcMinimo1, idMin + 1);
-    }
-
   personasImcMinimo = arrayPersonasRegistradas.filter(persona => persona.imc == imcMinimo1);
 
-   personasImcMinimoOk = [
-    ...personasImcMinimo,
-    indices
-    
-  ]
-
-  
   eliminarFilas();
-  personasImcMinimoOk.forEach((elemento,i)=>{
-   
-    if (i == personasImcMinimoOk.length -1) {
-       return;
-    }
-    tbody = document.querySelector("tbody");
 
-    if (personasImcMinimoOk[i].imc < 25) {
-      color = "green";
-    } else if (personasImcMinimoOk[i].imc > 25 && personasImcMinimoOk[i].imc < 30) {
-      color = "yellow";
-    } else {
-      color = "red";
-    }
+  mostrarHtml(personasImcMinimo);
 
-    tr = document.createElement("tr");
-
-    tr.innerHTML = ` 
-    <th scope="col">${personasImcMinimoOk[personasImcMinimoOk.length-1][i] +1}</th>
-    <td>${personasImcMinimoOk[i].dni}</td>
-    <td>${personasImcMinimoOk[i].nombre}</td>
-    <td>${personasImcMinimoOk[i].apellido}</td>
-    <td>${personasImcMinimoOk[i].estatura}</td>
-    <td>${personasImcMinimoOk[i].peso}</td>
-    <td style="color:${color}">${personasImcMinimoOk[i].imc}</td>
-    `;
-      tbody.append(tr);
-
-
-  })
 } 
 
 function buscarImcMayores() {
@@ -459,62 +304,18 @@ function buscarImcMayores() {
     'warning'
   )
   
-  arrayPersonasRegistradas = JSON.parse(localStorage.getItem("personasRegistradas")) || [];
+  obtenerPersonasRegistradas();  
+  
   const arrayImc = arrayPersonasRegistradas.map(persona => persona.imc);
   
-  
   imcMaximo = Math.max(...arrayImc);
-  indices = []
-  idMax = arrayImc.indexOf(imcMaximo);
-  
-  while (idMax != -1) {
-      indices.push(idMax);
-      idMax = arrayImc.indexOf(imcMaximo, idMax + 1);
-    }
-
-
+ 
   personasImcMaximo = arrayPersonasRegistradas.filter(persona => persona.imc == imcMaximo);
 
-   personasImcMaximoOk = [
-    ...personasImcMaximo,
-    indices
-    
-  ]
-
-  console.log(personasImcMaximoOk)
-  
   eliminarFilas();
-  personasImcMaximoOk.forEach((elemento,i)=>{
-   
-    if (i == personasImcMaximoOk.length -1) {
-       return;
-    }
-    tbody = document.querySelector("tbody");
-
-    if (personasImcMaximoOk[i].imc < 25) {
-      color = "green";
-    } else if (personasImcMaximoOk[i].imc > 25 && personasImcMaximoOk[i].imc < 30) {
-      color = "yellow";
-    } else {
-      color = "red";
-    }
-
-    tr = document.createElement("tr");
-
-    tr.innerHTML = ` 
-    <th scope="col">${personasImcMaximoOk[personasImcMaximoOk.length-1][i] +1}</th>
-    <td>${personasImcMaximoOk[i].dni}</td>
-    <td>${personasImcMaximoOk[i].nombre}</td>
-    <td>${personasImcMaximoOk[i].apellido}</td>
-    <td>${personasImcMaximoOk[i].estatura}</td>
-    <td>${personasImcMaximoOk[i].peso}</td>
-    <td style="color:${color}">${personasImcMaximoOk[i].imc}</td>
-    `;
-      tbody.append(tr);
-
-
-  })
-
+  
+  mostrarHtml(personasImcMaximo);
+  
 }
 
 implementarDom();
