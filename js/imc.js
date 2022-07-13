@@ -75,6 +75,14 @@ const mostrarHtml = (personas) => {
   });
 }
 
+const limpiarFormulario = () => {
+  document.querySelector("#dni").value = "";
+  document.querySelector("#nombre").value = "";
+  document.querySelector("#apellido").value = "";
+  document.querySelector("#estatura").value = "";
+  document.querySelector("#peso").value = "";
+}
+
 function implementarDom() {
   obtenerPersonasRegistradas();
   if (arrayPersonasRegistradas.length > 0) {
@@ -91,20 +99,12 @@ function mostrarListado() {
   mostrarHtml(arrayPersonasRegistradas);
 }
 
-const limpiarFormulario = () => {
-      document.querySelector("#dni").value = "";
-      document.querySelector("#nombre").value = "";
-      document.querySelector("#apellido").value = "";
-      document.querySelector("#estatura").value = "";
-      document.querySelector("#peso").value = "";
-  }
-
 
 const btnImportarPacientes = document.querySelector("#listadojson");
 btnImportarPacientes.addEventListener("click", importarListado);
 
-const btnAgregarPaciente = document.querySelector("#addPaciente");
-btnAgregarPaciente.addEventListener("click", agregarPaciente);
+// const btnAgregarPaciente = document.querySelector("#addPaciente");
+// btnAgregarPaciente.addEventListener("submit", agregarPaciente);
 
 const btnLimpiarFormulario = document.querySelector("#limpiarForm");
 btnLimpiarFormulario &&  btnLimpiarFormulario.addEventListener("click", limpiarFormulario);
@@ -126,6 +126,9 @@ btnBorrarPaciente && searchBar.addEventListener("input", buscarPorBarra);
 
 const btnBorrarListadoDePaciente = document.querySelector("#borrarListaDePacientes");
 btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
+
+const btnForm = document.querySelector("#form");
+btnForm.addEventListener("submit", agregarPaciente);
 
 function buscarPorBarra() {
   obtenerPersonasRegistradas();
@@ -151,24 +154,21 @@ async function importarListado() {
 
   arrayPersonasRegistradas = [...personas,...arrayPersonasRegistradas];
 
-  let personasMap = arrayPersonasRegistradas.map(persona => {
-  
-      return [JSON.stringify(persona), persona]
-
-  });
-  let personasMapArr = new Map(personasMap); // Pares de clave y valor
-
-  let unicos = [...personasMapArr.values()]; // Conversión a un array
-  
+  // Solo se toma un solo objeto de aquellos que tienen  igual DNI. Se arma el array cumpliendo la condición 
+  unicos = arrayPersonasRegistradas.filter( (v, i, a) => a.findIndex( t =>( t.dni === v.dni) ) === i);
+ 
   eliminarFilas();
 
+  // Mostrará primero los elementos data y posteriormente los almacenados en arrayPersonasRegistradas
   mostrarHtml(unicos);
 
   almacenarPersonasEnLocalStorage("personasRegistradas",unicos);
  
 }
 
-function agregarPaciente() {
+function agregarPaciente(e) {
+
+  e.preventDefault();
 
   obtenerPersonasRegistradas();
 
@@ -182,39 +182,72 @@ function agregarPaciente() {
   
   peso = Number(document.querySelector("#peso").value);
 
-   let arrayDNIRegistrados =  arrayPersonasRegistradas.length > 0 ? arrayPersonasRegistradas.map( persona => persona.dni ) : [];  
+  const parrafo = document.querySelector("#warnings")
+
+  let arrayDNIRegistrados =  arrayPersonasRegistradas.length > 0 ? arrayPersonasRegistradas.map( persona => persona.dni ) : [];  
   
-  if(dni == 0) {
-    alert('Ingrese su DNI, por favor');
-    document.fvalida.dni.focus();
-    return ;
-  } else if (arrayDNIRegistrados.includes(dni)) {
-    alert("Número de DNI ya ingresado. Ingrese un nuevo DNI")
+  let warning = "";
+
+  let entrar = false;
+
+  parrafo.innerHTML = "";
+
+  if (isNaN(dni) ) {
+    warning += `El DNI NO es valido. Ingrese el dato correctamente. <br>`
+    entrar = true;
+  } else if( dni  < 1000000 || dni > 99999999)   {
+    warning += `El DNI NO es válido. Ingresé los 7 dígitos. <br>`
+    entrar = true;
+    document.fvalida.estatura.focus();
+  } else  if (arrayDNIRegistrados.includes(dni)) {
+    warning += `El DNI ya se encuentra registrado. Ingrese un nuevo DNI <br>`
+    entrar = true;
     document.querySelector("#dni").value = "";
     document.fvalida.dni.focus();
-    return;
   }
 
-  if (nombre.length == 0) {
-    alert('Ingrese su nombre, por favor');
+  if (nombre.length < 2) {
+    warning += `El nombre NO es válido. <br>`
+    entrar = true;
     document.fvalida.nombre.focus();
-    return;
   }
-  if (apellido.length == 0) {
-    alert('Ingresa su apellido, por favor');
+  if (apellido.length < 2) {
+    warning += `El apellido NO es válido. <br>`
+    entrar = true;
     document.fvalida.apellido.focus();
-    return;
   } 
-  if(estatura == 0) {
-    alert('Ingresa su altura, por favor');
+
+  if (isNaN(estatura) ) {
+    warning += `La estatura NO es valida. Ingrese el dato correctamente. <br>`
+    entrar = true;
+  } else if( estatura < 0.62 || estatura > 2.60)   {
+    warning += `La estatura NO es válida. <br>`
+    entrar = true;
     document.fvalida.estatura.focus();
-    return;
   } 
-  if(peso == 0) {
-    alert('Ingresa su altura, por favor');
+  
+
+  if (isNaN(peso) ) {
+    warning += `El peso NO es valido. Ingrese el dato correctamente. <br>`
+    entrar = true;
+  } else if( peso < 2 || peso > 595)   {
+    warning += `El peso NO es válido. <br>`
+    entrar = true;
+    document.fvalida.estatura.focus();
+  } 
+
+  if( (typeof peso   ===  'number' ) && (peso < 2 || peso > 595) ) {
+    warning += `El peso NO es válido. <br>`
+    entrar = true;
     document.fvalida.peso.focus();
-    return;
   }    
+
+    if (entrar) {
+      parrafo.innerHTML = warning;
+      return;
+    } else{
+      parrafo.innerHTML = "Paciente agregado correctamente.";
+    }
 
   imc = calcularIMC(peso, estatura);
   
@@ -259,7 +292,6 @@ function borrarUltimoPaciente() {
 
 } 
   
-
 function modificarTitulo() {
   let titulo = document.querySelector("#tituloPrincipal");
   titulo.style.color = "blueviolet";

@@ -31,24 +31,27 @@
       </nav>
       <h1 style="text-align: center;">Ingrese los datos del paciente</h1>
       <br>
-      <form class="form-inline" action="" name="fvalida">
+      <form class="form-inline" action="" name="fvalida" id="form">
         
       <div class="input-group">
         <input type="text" class="form-control" id="dni" placeholder="Ingrese su número de DNI"  name="dni" >
         <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre"  name="nombre"  >
         <input type="text" class="form-control" id="apellido" placeholder="Ingrese su apellido" name="apellido" >
       </div>
-      <br>
+      <br>  
       <br>
       <div class="input-group">
-        <input type="number" class="form-control" id="estatura" placeholder="Ingrese su estatura en metros" name="estatura" >
-        <input type="number" class="form-control" id="peso" placeholder="Ingrese su peso en kilogramos" name="peso" >
+        <input type="text" class="form-control" id="estatura" placeholder="Ingrese su estatura en metros" name="estatura" >
+        <input type="text" class="form-control" id="peso" placeholder="Ingrese su peso en kilogramos" name="peso" >
       </div>
       <br>  
       <div class="input-group">
-      <button id="addPaciente" type="button" class="btn btn-primary"> Agregar paciente </button>
+      <button id="addPaciente" type="submit" class="btn btn-primary"> Agregar paciente </button>
       <button id="limpiarForm" type="button" class="btn btn-danger"> Limpiar formulario </button>
+        
+     
     </div>
+    <p class="warnings" id="warnings"><p>
     </form>
     <br>
 
