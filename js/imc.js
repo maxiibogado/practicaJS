@@ -1,4 +1,8 @@
 let personaRegistrada = [];
+let warning = "";
+let entrar = false;
+let arrayDNIRegistrados = [];
+
 
 const obtenerPersonasRegistradas = () => {
     arrayPersonasRegistradas = JSON.parse(localStorage.getItem('personasRegistradas')) || [] ;
@@ -99,6 +103,61 @@ function mostrarListado() {
   mostrarHtml(arrayPersonasRegistradas);
 }
 
+function validarRegistro(dato,nombreDato) {
+   if (isNaN(dato) || dato == 0 ) {
+     warning += `El ${nombreDato} NO es valido. Ingrese el dato correctamente. <br>`
+     entrar = true;
+     document.querySelector(`#${nombreDato}`).value = "";
+     return;
+  }
+  switch (nombreDato) {
+    case "dni":
+      if( dato  < 10000000 || dato > 99999999)   {
+        warning += `El ${nombreDato} NO es válido. Ingresé los 8 dígitos. <br>`
+        entrar = true;
+        document.fvalida.dni.focus();
+        document.querySelector(`#${nombreDato}`).value = "";
+    // Se verifica que no se intente ingresar un DNI repetido.
+      } else  if (arrayDNIRegistrados.includes(dato)) {
+        warning += `El ${nombreDato} ya se encuentra registrado. Ingrese un nuevo ${nombreDato} <br>`
+        entrar = true;
+        document.querySelector(`#${nombreDato}`).value = "";
+        document.fvalida.dni.focus();
+      }
+      break;
+    case "estatura":
+      if( dato < 0.62 || dato > 2.60)   {
+        warning += `La ${nombreDato} NO es válida. <br>`
+        entrar = true;
+        document.fvalida.estatura.focus();
+        document.querySelector(`#${nombreDato}`).value = "";
+      } 
+      break;
+    case "peso":
+      if( dato < 2 || dato > 595)   {
+        warning += `La ${nombreDato} NO es válida. <br>`
+        entrar = true;
+        document.fvalida.peso.focus();
+        document.querySelector(`#${nombreDato}`).value = "";
+      } 
+      break;
+
+    default:
+      console.log("hola"  )
+      break;
+  }
+
+
+}
+
+function validarNombreApellido(dato,nombreDato) {
+  if (dato.length < 2) {
+    warning += `El ${nombreDato} NO es válido. <br>`
+    entrar = true;
+    document.querySelector(`#${nombreDato}`).value = "";
+  }
+}
+
 
 const btnImportarPacientes = document.querySelector("#listadojson");
 btnImportarPacientes.addEventListener("click", importarListado);
@@ -184,66 +243,24 @@ function agregarPaciente(e) {
 
   const parrafo = document.querySelector("#warnings")
 
-  let arrayDNIRegistrados =  arrayPersonasRegistradas.length > 0 ? arrayPersonasRegistradas.map( persona => persona.dni ) : [];  
+  arrayDNIRegistrados =  arrayPersonasRegistradas.length > 0 ? arrayPersonasRegistradas.map( persona => persona.dni ) : [];  
   
-  let warning = "";
-
-  let entrar = false;
-
   parrafo.innerHTML = "";
-
-  if (isNaN(dni) ) {
-    warning += `El DNI NO es valido. Ingrese el dato correctamente. <br>`
-    entrar = true;
-  } else if( dni  < 1000000 || dni > 99999999)   {
-    warning += `El DNI NO es válido. Ingresé los 7 dígitos. <br>`
-    entrar = true;
-    document.fvalida.estatura.focus();
-  } else  if (arrayDNIRegistrados.includes(dni)) {
-    warning += `El DNI ya se encuentra registrado. Ingrese un nuevo DNI <br>`
-    entrar = true;
-    document.querySelector("#dni").value = "";
-    document.fvalida.dni.focus();
-  }
-
-  if (nombre.length < 2) {
-    warning += `El nombre NO es válido. <br>`
-    entrar = true;
-    document.fvalida.nombre.focus();
-  }
-  if (apellido.length < 2) {
-    warning += `El apellido NO es válido. <br>`
-    entrar = true;
-    document.fvalida.apellido.focus();
-  } 
-
-  if (isNaN(estatura) ) {
-    warning += `La estatura NO es valida. Ingrese el dato correctamente. <br>`
-    entrar = true;
-  } else if( estatura < 0.62 || estatura > 2.60)   {
-    warning += `La estatura NO es válida. <br>`
-    entrar = true;
-    document.fvalida.estatura.focus();
-  } 
   
+  validarRegistro(dni,"dni");
+  
+  validarNombreApellido(nombre,"nombre");
 
-  if (isNaN(peso) ) {
-    warning += `El peso NO es valido. Ingrese el dato correctamente. <br>`
-    entrar = true;
-  } else if( peso < 2 || peso > 595)   {
-    warning += `El peso NO es válido. <br>`
-    entrar = true;
-    document.fvalida.estatura.focus();
-  } 
-
-  if( (typeof peso   ===  'number' ) && (peso < 2 || peso > 595) ) {
-    warning += `El peso NO es válido. <br>`
-    entrar = true;
-    document.fvalida.peso.focus();
-  }    
+  validarNombreApellido(apellido,"apellido")
+  
+  validarRegistro(estatura,"estatura");
+  
+  validarRegistro(peso,"peso");
 
     if (entrar) {
       parrafo.innerHTML = warning;
+      entrar = false
+      warning = "";
       return;
     } else{
       parrafo.innerHTML = "Paciente agregado correctamente.";
