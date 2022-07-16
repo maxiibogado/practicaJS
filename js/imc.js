@@ -2,6 +2,13 @@ let personaRegistrada = [];
 let warning = "";
 let entrar = false;
 let arrayDNIRegistrados = [];
+const placeholderDNI = document.querySelector(`#dni`).placeholder;
+const placeholderNombre = document.querySelector("#nombre").placeholder;
+const placeholderApellido = document.querySelector("#apellido").placeholder;
+const placeholderEstatura = document.querySelector("#estatura").placeholder;
+const placeholderPeso = document.querySelector("#peso").placeholder;
+
+
 
 
 const obtenerPersonasRegistradas = () => {
@@ -94,6 +101,15 @@ function implementarDom() {
   }
 }
 
+function ejecutarValidacion(nombreDato) {
+  warning = nombreDato.charAt(0) == "e" 
+  ? ` La ${nombreDato} no es válida. Ingrese el dato correctamente. <br>` 
+  : ` El ${nombreDato} no es valido. Ingrese el dato correctamente. <br>`
+  entrar = true;
+  document.querySelector(`#${nombreDato}`).value = "";
+}
+
+
 function mostrarListado() {
 
   obtenerPersonasRegistradas();
@@ -104,58 +120,109 @@ function mostrarListado() {
 }
 
 function validarRegistro(dato,nombreDato) {
-   if (isNaN(dato) || dato == 0 ) {
-     warning += `El ${nombreDato} NO es valido. Ingrese el dato correctamente. <br>`
+  let placeholderOriginal = "";
+  placeholderOriginal =  document.querySelector(`#${nombreDato}`).placeholder;
+  
+  if (isNaN(dato) || dato == 0 ) { 
+    document.querySelector(`#${nombreDato}`).className = "form-control"; 
+    warning = nombreDato.charAt(0) == "e" 
+     ? `  ${nombreDato.toUpperCase()}  INCORRECTA. Ingrese el dato.` 
+     : `  ${nombreDato.toUpperCase()}  INCORRECTO. Ingrese el dato.`
      entrar = true;
      document.querySelector(`#${nombreDato}`).value = "";
+     document.querySelector(`#${nombreDato}`).value = "";
+     document.querySelector(`#${nombreDato}`).placeholder = warning;
+     document.querySelector(`#${nombreDato}`).className = "test"
      return;
   }
+  
   switch (nombreDato) {
     case "dni":
       if( dato  < 10000000 || dato > 99999999)   {
-        warning += `El ${nombreDato} NO es válido. Ingresé los 8 dígitos. <br>`
+        warning = `El ${nombreDato} NO es válido. Ingresé los 8 dígitos.`
         entrar = true;
-        document.fvalida.dni.focus();
         document.querySelector(`#${nombreDato}`).value = "";
+        document.querySelector(`#${nombreDato}`).placeholder = warning;
+        document.querySelector(`#${nombreDato}`).className = "test"
+        return;
     // Se verifica que no se intente ingresar un DNI repetido.
       } else  if (arrayDNIRegistrados.includes(dato)) {
-        warning += `El ${nombreDato} ya se encuentra registrado. Ingrese un nuevo ${nombreDato} <br>`
+        warning = `El ${nombreDato.toUpperCase()} ya se encuentra registrado. Ingrese un nuevo ${nombreDato.toUpperCase()}.`
         entrar = true;
         document.querySelector(`#${nombreDato}`).value = "";
-        document.fvalida.dni.focus();
+        document.querySelector(`#${nombreDato}`).placeholder = warning;
+        document.querySelector(`#${nombreDato}`).className = "test"
+        return;
       }
+      
+      document.querySelector(`#${nombreDato}`).className = "form-control"; 
+
       break;
     case "estatura":
       if( dato < 0.62 || dato > 2.60)   {
-        warning += `La ${nombreDato} NO es válida. <br>`
-        entrar = true;
-        document.fvalida.estatura.focus();
-        document.querySelector(`#${nombreDato}`).value = "";
+      //  ejecutarValidacion(nombreDato);
+       warning = nombreDato.charAt(0) == "e" 
+       ? ` La ${nombreDato} no es válida. Ingrese el dato correctamente.` 
+       : ` El ${nombreDato} no es valido. Ingrese el dato correctamente.`
+       entrar = true;
+       document.querySelector(`#${nombreDato}`).value = "";
+       document.querySelector(`#${nombreDato}`).placeholder = warning;
+       document.querySelector(`#${nombreDato}`).className = "test"
+       return;
       } 
+      document.querySelector(`#${nombreDato}`).className = "form-control"; 
       break;
     case "peso":
       if( dato < 2 || dato > 595)   {
-        warning += `La ${nombreDato} NO es válida. <br>`
+        // ejecutarValidacion(nombreDato);
+        warning = nombreDato.charAt(0) == "e" 
+        ? ` La ${nombreDato} no es válida. Ingrese el dato correctamente.` 
+        : ` El ${nombreDato} no es valido. Ingrese el dato correctamente.`
         entrar = true;
-        document.fvalida.peso.focus();
         document.querySelector(`#${nombreDato}`).value = "";
+        document.querySelector(`#${nombreDato}`).placeholder = warning;
+        document.querySelector(`#${nombreDato}`).className = "test"
+        return;
       } 
+      document.querySelector(`#${nombreDato}`).className = "form-control"; 
       break;
 
     default:
-      console.log("hola"  )
       break;
+      
   }
+
+  if (nombreDato == "dni" ) {
+    document.querySelector(`#${nombreDato}`).placeholder = placeholderDNI 
+  } else if (nombreDato == "estatura") {
+    document.querySelector(`#${nombreDato}`).placeholder = placeholderEstatura
+  } else if (nombreDato == "peso") {
+    document.querySelector(`#${nombreDato}`).placeholder = placeholderPeso
+  }
+
+
+    // document.querySelector(`#${nombreDato}`).placeholder = placeholder + nombreDato; 
+  
 
 
 }
 
 function validarNombreApellido(dato,nombreDato) {
+
   if (dato.length < 2) {
-    warning += `El ${nombreDato} NO es válido. <br>`
+    warning = `${nombreDato.toUpperCase()} NO VÁLIDO. Ingrese el dato.`
     entrar = true;
     document.querySelector(`#${nombreDato}`).value = "";
+    document.querySelector(`#${nombreDato}`).placeholder = warning;
+    document.querySelector(`#${nombreDato}`).className = "test"
+    return;
   }
+  document.querySelector(`#${nombreDato}`).className = "form-control"; 
+
+  nombreDato == "nombre"    
+  ? document.querySelector(`#${nombreDato}`).placeholder = placeholderNombre
+  : document.querySelector(`#${nombreDato}`).placeholder = placeholderApellido
+
 }
 
 
@@ -257,8 +324,14 @@ function agregarPaciente(e) {
   
   validarRegistro(peso,"peso");
 
+  // document.querySelector(`#dni`).placeholder = placeholderOriginal; 
+  // document.querySelector(`#nombre`).placeholder = placeholderOriginal; 
+  // document.querySelector(`#apellido`).placeholder = placeholderOriginal; 
+  // document.querySelector(`#estatura`).placeholder = placeholderOriginal; 
+  // document.querySelector(`#estatura`).placeholder = placeholderOriginal; 
+
+
     if (entrar) {
-      parrafo.innerHTML = warning;
       entrar = false
       warning = "";
       return;
@@ -290,10 +363,14 @@ function agregarPaciente(e) {
 
   limpiarFormulario();
 
+  parrafo.innerHTML = warning;
+      entrar = false
+       warning = "";
+
 }
 
 function borrarUltimoPaciente() {
-  
+    
       obtenerPersonasRegistradas();
       
       arrayPersonasRegistradas.pop();
