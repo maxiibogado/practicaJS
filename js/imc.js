@@ -103,8 +103,8 @@ function implementarDom() {
 
 function ejecutarValidacion(nombreDato) {
   warning = nombreDato.charAt(0) == "e" 
-  ? ` La ${nombreDato} no es válida. Ingrese el dato correctamente. <br>` 
-  : ` El ${nombreDato} no es valido. Ingrese el dato correctamente. <br>`
+  ? ` La ${nombreDato} no es válida. Ingrese el dato correctamente.` 
+  : ` El ${nombreDato} no es valido. Ingrese el dato correctamente.`
   entrar = true;
   document.querySelector(`#${nombreDato}`).value = "";
 }
@@ -129,7 +129,6 @@ function validarRegistro(dato,nombreDato) {
      ? `  ${nombreDato.toUpperCase()}  INCORRECTA. Ingrese el dato.` 
      : `  ${nombreDato.toUpperCase()}  INCORRECTO. Ingrese el dato.`
      entrar = true;
-     document.querySelector(`#${nombreDato}`).value = "";
      document.querySelector(`#${nombreDato}`).value = "";
      document.querySelector(`#${nombreDato}`).placeholder = warning;
      document.querySelector(`#${nombreDato}`).className = "test"
@@ -317,19 +316,19 @@ function agregarPaciente(e) {
   
   validarRegistro(peso,"peso");
 
-  // document.querySelector(`#dni`).placeholder = placeholderOriginal; 
-  // document.querySelector(`#nombre`).placeholder = placeholderOriginal; 
-  // document.querySelector(`#apellido`).placeholder = placeholderOriginal; 
-  // document.querySelector(`#estatura`).placeholder = placeholderOriginal; 
-  // document.querySelector(`#estatura`).placeholder = placeholderOriginal; 
-
 
     if (entrar) {
       entrar = false
       warning = "";
       return;
     } else{
-      parrafo.innerHTML = "Paciente agregado correctamente.";
+        Swal.fire({
+          position: 'top-mid',
+          icon: 'success',
+          title: 'Su paciente ha sido guardado correctamente.',
+          showConfirmButton: false,
+          timer: 1000
+        })
     }
 
   imc = calcularIMC(peso, estatura);
@@ -345,14 +344,6 @@ function agregarPaciente(e) {
   mostrarHtml(personaRegistrada);
    
   personaRegistrada = [];
-
-  Swal.fire({
-    position: 'top-mid',
-    icon: 'success',
-    title: 'Su paciente ha sido guardado correctamente.',
-    showConfirmButton: false,
-    timer: 1000
-  })
 
   limpiarFormulario();
 
