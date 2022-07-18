@@ -101,12 +101,18 @@ function implementarDom() {
   }
 }
 
+function modificarInput(nombreDato) {
+  document.querySelector(`#${nombreDato}`).value = "";
+  document.querySelector(`#${nombreDato}`).placeholder = warning;
+  document.querySelector(`#${nombreDato}`).className = "test"
+}
+
+
 function ejecutarValidacion(nombreDato) {
   warning = nombreDato.charAt(0) == "e" 
   ? ` La ${nombreDato} no es válida. Ingrese el dato correctamente.` 
   : ` El ${nombreDato} no es valido. Ingrese el dato correctamente.`
   entrar = true;
-  document.querySelector(`#${nombreDato}`).value = "";
 }
 
 
@@ -120,19 +126,15 @@ function mostrarListado() {
 }
 
 function validarRegistro(dato,nombreDato) {
-  let placeholderOriginal = "";
-  placeholderOriginal =  document.querySelector(`#${nombreDato}`).placeholder;
   
   if (isNaN(dato) || dato == 0 ) { 
     document.querySelector(`#${nombreDato}`).className = "form-control"; 
     warning = nombreDato.charAt(0) == "e" 
      ? `  ${nombreDato.toUpperCase()}  INCORRECTA. Ingrese el dato.` 
      : `  ${nombreDato.toUpperCase()}  INCORRECTO. Ingrese el dato.`
-     entrar = true;
-     document.querySelector(`#${nombreDato}`).value = "";
-     document.querySelector(`#${nombreDato}`).placeholder = warning;
-     document.querySelector(`#${nombreDato}`).className = "test"
-     return;
+    entrar = true;
+    modificarInput(nombreDato);
+    return;
   }
   
   switch (nombreDato) {
@@ -140,17 +142,13 @@ function validarRegistro(dato,nombreDato) {
       if( dato  < 10000000 || dato > 99999999)   {
         warning = `El ${nombreDato} NO es válido. Ingresé los 8 dígitos.`
         entrar = true;
-        document.querySelector(`#${nombreDato}`).value = "";
-        document.querySelector(`#${nombreDato}`).placeholder = warning;
-        document.querySelector(`#${nombreDato}`).className = "test"
+        modificarInput(nombreDato);
         return;
     // Se verifica que no se intente ingresar un DNI repetido.
       } else  if (arrayDNIRegistrados.includes(dato)) {
         warning = `El ${nombreDato.toUpperCase()} ya se encuentra registrado. Ingrese un nuevo ${nombreDato.toUpperCase()}.`
         entrar = true;
-        document.querySelector(`#${nombreDato}`).value = "";
-        document.querySelector(`#${nombreDato}`).placeholder = warning;
-        document.querySelector(`#${nombreDato}`).className = "test"
+        modificarInput(nombreDato);
         return;
       }
       
@@ -159,28 +157,16 @@ function validarRegistro(dato,nombreDato) {
       break;
     case "estatura":
       if( dato < 0.62 || dato > 2.60)   {
-      //  ejecutarValidacion(nombreDato);
-       warning = nombreDato.charAt(0) == "e" 
-       ? ` La ${nombreDato} no es válida. Ingrese el dato correctamente.` 
-       : ` El ${nombreDato} no es valido. Ingrese el dato correctamente.`
-       entrar = true;
-       document.querySelector(`#${nombreDato}`).value = "";
-       document.querySelector(`#${nombreDato}`).placeholder = warning;
-       document.querySelector(`#${nombreDato}`).className = "test"
+       ejecutarValidacion(nombreDato);  
+       modificarInput(nombreDato);
        return;
       } 
       document.querySelector(`#${nombreDato}`).className = "form-control"; 
       break;
     case "peso":
       if( dato < 2 || dato > 595)   {
-        // ejecutarValidacion(nombreDato);
-        warning = nombreDato.charAt(0) == "e" 
-        ? ` La ${nombreDato} no es válida. Ingrese el dato correctamente.` 
-        : ` El ${nombreDato} no es valido. Ingrese el dato correctamente.`
-        entrar = true;
-        document.querySelector(`#${nombreDato}`).value = "";
-        document.querySelector(`#${nombreDato}`).placeholder = warning;
-        document.querySelector(`#${nombreDato}`).className = "test"
+        ejecutarValidacion(nombreDato);
+        modificarInput(nombreDato);
         return;
       } 
       document.querySelector(`#${nombreDato}`).className = "form-control"; 
@@ -207,9 +193,7 @@ function validarNombreApellido(dato,nombreDato) {
   if (dato.length < 2) {
     warning = `${nombreDato.toUpperCase()} NO VÁLIDO. Ingrese el dato.`
     entrar = true;
-    document.querySelector(`#${nombreDato}`).value = "";
-    document.querySelector(`#${nombreDato}`).placeholder = warning;
-    document.querySelector(`#${nombreDato}`).className = "test"
+    modificarInput(nombreDato);
     return;
   }
   document.querySelector(`#${nombreDato}`).className = "form-control"; 
@@ -300,12 +284,8 @@ function agregarPaciente(e) {
   
   peso = Number(document.querySelector("#peso").value);
 
-  const parrafo = document.querySelector("#warnings")
-
   arrayDNIRegistrados =  arrayPersonasRegistradas.length > 0 ? arrayPersonasRegistradas.map( persona => persona.dni ) : [];  
-  
-  parrafo.innerHTML = "";
-  
+    
   validarRegistro(dni,"dni");
   
   validarNombreApellido(nombre,"nombre");
@@ -322,12 +302,12 @@ function agregarPaciente(e) {
       warning = "";
       return;
     } else{
-        Swal.fire({
-          position: 'top-mid',
-          icon: 'success',
-          title: 'Su paciente ha sido guardado correctamente.',
-          showConfirmButton: false,
-          timer: 1000
+      Swal.fire({
+        position: 'top-mid',
+        icon: 'success',
+        title: 'Su paciente ha sido guardado correctamente.',
+        showConfirmButton: false,
+        timer: 1000
         })
     }
 
@@ -347,9 +327,8 @@ function agregarPaciente(e) {
 
   limpiarFormulario();
 
-  parrafo.innerHTML = warning;
       entrar = false
-       warning = "";
+      warning = "";
 
 }
 
@@ -386,12 +365,6 @@ function calcularIMC(peso, altura) {
 
 function buscarImcMenores() {
   
-  Swal.fire(
-    'Felicitar a los pacientes!',
-    'Llamar y dar el alta!',
-    'success'
-  )
-  
   obtenerPersonasRegistradas() 
   
   const arrayImc = arrayPersonasRegistradas.map(persona => persona.imc);
@@ -407,12 +380,6 @@ function buscarImcMenores() {
 } 
 
 function buscarImcMayores() {
-  
-  Swal.fire(
-    'Cuidado con los pacientes!',
-    'Verificar comidas y realizar un llamado para dar seguimiento!',
-    'warning'
-  )
   
   obtenerPersonasRegistradas();  
   
