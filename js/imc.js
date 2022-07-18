@@ -201,10 +201,6 @@ function validarRegistro(dato,nombreDato) {
   }
 
 
-    // document.querySelector(`#${nombreDato}`).placeholder = placeholder + nombreDato; 
-  
-
-
 }
 
 function validarNombreApellido(dato,nombreDato) {
@@ -228,9 +224,6 @@ function validarNombreApellido(dato,nombreDato) {
 
 const btnImportarPacientes = document.querySelector("#listadojson");
 btnImportarPacientes.addEventListener("click", importarListado);
-
-// const btnAgregarPaciente = document.querySelector("#addPaciente");
-// btnAgregarPaciente.addEventListener("submit", agregarPaciente);
 
 const btnLimpiarFormulario = document.querySelector("#limpiarForm");
 btnLimpiarFormulario &&  btnLimpiarFormulario.addEventListener("click", limpiarFormulario);
