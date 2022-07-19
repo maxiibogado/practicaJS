@@ -7,15 +7,7 @@
     
 }
 
-.warnings{
-        width: 500px;
-        text-align: center;
-        margin: auto;
-        color: red;
-        padding-top: 20px;
-}
-
-.test{
+.invalid{
         display: block;
         width: 100%;
         padding: .375rem .75rem;
@@ -35,4 +27,9 @@
         flex: 1 1 auto;
         width: 1%;
         min-width: 0;
-}        
+} 
+
+::placeholder {
+        color: black;
+        font-size: 1.3em;
+      }

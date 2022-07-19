@@ -87,11 +87,16 @@ const mostrarHtml = (personas) => {
 }
 
 const limpiarFormulario = () => {
-  document.querySelector("#dni").value = "";
-  document.querySelector("#nombre").value = "";
-  document.querySelector("#apellido").value = "";
-  document.querySelector("#estatura").value = "";
-  document.querySelector("#peso").value = "";
+  
+  const nombreDatos = ["#dni","#nombre","#apellido","#estatura","#peso"]
+  const placeholders = [placeholderDNI,placeholderNombre,placeholderApellido,placeholderEstatura,placeholderPeso]
+
+  for (let i = 0; i < nombreDatos.length; i++) {
+    document.querySelector(nombreDatos[i]).value = "";
+    document.querySelector(nombreDatos[i]).placeholder = placeholders[i];
+    document.querySelector(nombreDatos[i]).className = "form-control";
+  }
+
 }
 
 function implementarDom() {
@@ -104,7 +109,7 @@ function implementarDom() {
 function modificarInput(nombreDato) {
   document.querySelector(`#${nombreDato}`).value = "";
   document.querySelector(`#${nombreDato}`).placeholder = warning;
-  document.querySelector(`#${nombreDato}`).className = "test"
+  document.querySelector(`#${nombreDato}`).className = "invalid"
 }
 
 
