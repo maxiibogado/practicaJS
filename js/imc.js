@@ -99,6 +99,26 @@ const limpiarFormulario = () => {
 
 }
 
+const ingresarClaseInputOriginal = (nombreDato) => {
+  document.querySelector(`#${nombreDato}`).className = "form-control"; 
+}
+
+const ingresarPlaceholderOriginal = (nombreDato) =>{
+  
+  if (nombreDato == "dni" ) {
+    document.querySelector(`#${nombreDato}`).placeholder = placeholderDNI 
+  } else if (nombreDato == "estatura") {
+    document.querySelector(`#${nombreDato}`).placeholder = placeholderEstatura
+  } else if (nombreDato == "peso") {
+    document.querySelector(`#${nombreDato}`).placeholder = placeholderPeso
+  } else if (nombreDato == "nombre"){
+    document.querySelector(`#${nombreDato}`).placeholder = placeholderNombre
+  } else if (nombreDato == "apellido"){
+    document.querySelector(`#${nombreDato}`).placeholder = placeholderApellido
+  } 
+
+}
+ 
 function implementarDom() {
   obtenerPersonasRegistradas();
   if (arrayPersonasRegistradas.length > 0) {
@@ -112,14 +132,12 @@ function modificarInput(nombreDato) {
   document.querySelector(`#${nombreDato}`).className = "invalid"
 }
 
-
 function ejecutarValidacion(nombreDato) {
   warning = nombreDato.charAt(0) == "e" 
   ? ` La ${nombreDato} no es válida. Ingrese el dato correctamente.` 
   : ` El ${nombreDato} no es valido. Ingrese el dato correctamente.`
   entrar = true;
 }
-
 
 function mostrarListado() {
 
@@ -133,7 +151,6 @@ function mostrarListado() {
 function validarRegistro(dato,nombreDato) {
   
   if (isNaN(dato) || dato == 0 ) { 
-    document.querySelector(`#${nombreDato}`).className = "form-control"; 
     warning = nombreDato.charAt(0) == "e" 
      ? `  ${nombreDato.toUpperCase()}  INCORRECTA. Ingrese el dato.` 
      : `  ${nombreDato.toUpperCase()}  INCORRECTO. Ingrese el dato.`
@@ -143,6 +160,7 @@ function validarRegistro(dato,nombreDato) {
   }
   
   switch (nombreDato) {
+    
     case "dni":
       if( dato  < 10000000 || dato > 99999999)   {
         warning = `El ${nombreDato} NO es válido. Ingresé los 8 dígitos.`
@@ -151,45 +169,36 @@ function validarRegistro(dato,nombreDato) {
         return;
     // Se verifica que no se intente ingresar un DNI repetido.
       } else  if (arrayDNIRegistrados.includes(dato)) {
-        warning = `El ${nombreDato.toUpperCase()} ya se encuentra registrado. Ingrese un nuevo ${nombreDato.toUpperCase()}.`
+        warning = `El ${nombreDato.toUpperCase()} ya se encuentra registrado.`
         entrar = true;
         modificarInput(nombreDato);
         return;
       }
-      
-      document.querySelector(`#${nombreDato}`).className = "form-control"; 
-
-      break;
+      ingresarClaseInputOriginal(nombreDato);
+    break;
+    
     case "estatura":
       if( dato < 0.62 || dato > 2.60)   {
        ejecutarValidacion(nombreDato);  
        modificarInput(nombreDato);
        return;
       } 
-      document.querySelector(`#${nombreDato}`).className = "form-control"; 
+      ingresarClaseInputOriginal(nombreDato);
       break;
-    case "peso":
+    
+      case "peso":
       if( dato < 2 || dato > 595)   {
         ejecutarValidacion(nombreDato);
         modificarInput(nombreDato);
         return;
       } 
-      document.querySelector(`#${nombreDato}`).className = "form-control"; 
+      ingresarClaseInputOriginal(nombreDato);
       break;
 
     default:
       break;
       
   }
-
-  if (nombreDato == "dni" ) {
-    document.querySelector(`#${nombreDato}`).placeholder = placeholderDNI 
-  } else if (nombreDato == "estatura") {
-    document.querySelector(`#${nombreDato}`).placeholder = placeholderEstatura
-  } else if (nombreDato == "peso") {
-    document.querySelector(`#${nombreDato}`).placeholder = placeholderPeso
-  }
-
 
 }
 
@@ -201,14 +210,10 @@ function validarNombreApellido(dato,nombreDato) {
     modificarInput(nombreDato);
     return;
   }
-  document.querySelector(`#${nombreDato}`).className = "form-control"; 
-
-  nombreDato == "nombre"    
-  ? document.querySelector(`#${nombreDato}`).placeholder = placeholderNombre
-  : document.querySelector(`#${nombreDato}`).placeholder = placeholderApellido
+  ingresarClaseInputOriginal(nombreDato);
+  ingresarPlaceholderOriginal(nombreDato);
 
 }
-
 
 const btnImportarPacientes = document.querySelector("#listadojson");
 btnImportarPacientes.addEventListener("click", importarListado);
@@ -234,8 +239,15 @@ btnBorrarPaciente && searchBar.addEventListener("input", buscarPorBarra);
 const btnBorrarListadoDePaciente = document.querySelector("#borrarListaDePacientes");
 btnBorrarListadoDePaciente.addEventListener("click", borrarListadoPacientes);
 
+const btnMostrarListadoMayorAMenorPeso = document.querySelector("#mayorAMenor");
+btnMostrarListadoMayorAMenorPeso.addEventListener("click", ordenarMayorAMenorPeso);
+
+const btnMostrarListadoMenorAMayorPeso = document.querySelector("#menorAMayor");
+btnMostrarListadoMenorAMayorPeso.addEventListener("click", ordenarMenorAMayorPeso);
+
 const btnForm = document.querySelector("#form");
 btnForm.addEventListener("submit", agregarPaciente);
+
 
 function buscarPorBarra() {
   obtenerPersonasRegistradas();
@@ -398,6 +410,22 @@ function buscarImcMayores() {
   
   mostrarHtml(personasImcMaximo);
   
+}
+
+function ordenarMayorAMenorPeso() {
+  obtenerPersonasRegistradas() ;
+  console.log(arrayPersonasRegistradas);
+  arrayPersonasRegistradas.sort(function(a,b){return b.peso - a.peso;});  
+  eliminarFilas();
+  mostrarHtml(arrayPersonasRegistradas);
+}
+
+function ordenarMenorAMayorPeso() {
+  obtenerPersonasRegistradas() ;
+  console.log(arrayPersonasRegistradas);
+  arrayPersonasRegistradas.sort(function(a,b){return a.peso - b.peso;});  
+  eliminarFilas();
+  mostrarHtml(arrayPersonasRegistradas);
 }
 
 implementarDom();
